@@ -22,6 +22,10 @@ use std::{
 pub struct Params {
     pub dns_seeders: &'static [&'static str],
     pub net: NetworkId,
+
+    pub dev_fee: u64,
+    pub dev_fee_script: &'static [u8],
+
     pub genesis: GenesisBlock,
     pub ghostdag_k: KType,
 
@@ -311,6 +315,11 @@ pub const MAINNET_PARAMS: Params = Params {
         "n-mainnet.kaspa.ws",
     ],
     net: NetworkId::new(NetworkType::Mainnet),
+    dev_fee: 2,
+    dev_fee_script: &[
+        0x20, 0x39, 0xff, 0x8, 0x90, 0xd7, 0x56, 0x2d, 0x1c, 0xe5, 0x24, 0xc1, 0xf6, 0x9b, 0xd7, 0x9b, 0x76, 0x66, 0x77, 0x95, 0x14,
+        0xb6, 0x91, 0x42, 0x18, 0xb4, 0x0, 0xf1, 0x2b, 0xaa, 0xac, 0x2, 0x18, 0xac,
+    ],
     genesis: GENESIS,
     ghostdag_k: LEGACY_DEFAULT_GHOSTDAG_K,
     legacy_timestamp_deviation_tolerance: LEGACY_TIMESTAMP_DEVIATION_TOLERANCE,
@@ -370,6 +379,8 @@ pub const TESTNET_PARAMS: Params = Params {
         "seeder1-testnet.kaspad.net",
     ],
     net: NetworkId::with_suffix(NetworkType::Testnet, 10),
+    dev_fee: 0,
+    dev_fee_script: &[],
     genesis: TESTNET_GENESIS,
     ghostdag_k: LEGACY_DEFAULT_GHOSTDAG_K,
     legacy_timestamp_deviation_tolerance: LEGACY_TIMESTAMP_DEVIATION_TOLERANCE,
@@ -431,6 +442,8 @@ pub const TESTNET11_PARAMS: Params = Params {
         "n-testnet-11.kaspa.ws",
     ],
     net: NetworkId::with_suffix(NetworkType::Testnet, 11),
+    dev_fee: 0,
+    dev_fee_script: &[],
     genesis: TESTNET11_GENESIS,
     legacy_timestamp_deviation_tolerance: LEGACY_TIMESTAMP_DEVIATION_TOLERANCE,
     new_timestamp_deviation_tolerance: NEW_TIMESTAMP_DEVIATION_TOLERANCE,
@@ -482,6 +495,8 @@ pub const TESTNET11_PARAMS: Params = Params {
 pub const SIMNET_PARAMS: Params = Params {
     dns_seeders: &[],
     net: NetworkId::new(NetworkType::Simnet),
+    dev_fee: 0,
+    dev_fee_script: &[],
     genesis: SIMNET_GENESIS,
     legacy_timestamp_deviation_tolerance: LEGACY_TIMESTAMP_DEVIATION_TOLERANCE,
     new_timestamp_deviation_tolerance: NEW_TIMESTAMP_DEVIATION_TOLERANCE,
@@ -534,6 +549,8 @@ pub const SIMNET_PARAMS: Params = Params {
 pub const DEVNET_PARAMS: Params = Params {
     dns_seeders: &[],
     net: NetworkId::new(NetworkType::Devnet),
+    dev_fee: 0,
+    dev_fee_script: &[],
     genesis: DEVNET_GENESIS,
     ghostdag_k: LEGACY_DEFAULT_GHOSTDAG_K,
     legacy_timestamp_deviation_tolerance: LEGACY_TIMESTAMP_DEVIATION_TOLERANCE,

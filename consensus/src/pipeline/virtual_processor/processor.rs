@@ -55,7 +55,7 @@ use kaspa_consensus_core::{
     header::Header,
     merkle::calc_hash_merkle_root_with_options,
     pruning::PruningPointsList,
-    tx::{MutableTransaction, Transaction},
+    tx::{MutableTransaction, ScriptPublicKey, Transaction},
     utxo::{
         utxo_diff::UtxoDiff,
         utxo_view::{UtxoView, UtxoViewComposition},
@@ -108,6 +108,8 @@ pub struct VirtualStateProcessor {
     db: Arc<DB>,
 
     // Config
+    pub(super) dev_fee: u64,
+    pub(super) dev_fee_script: ScriptPublicKey,
     pub(super) genesis: GenesisBlock,
     pub(super) max_block_parents: u8,
     pub(super) mergeset_size_limit: u64,
@@ -182,6 +184,8 @@ impl VirtualStateProcessor {
             pruning_receiver,
             thread_pool,
 
+            dev_fee: params.dev_fee.clone(),
+            dev_fee_script: ScriptPublicKey::from_vec(0, params.dev_fee_script.to_vec()),
             genesis: params.genesis.clone(),
             max_block_parents: params.max_block_parents,
             mergeset_size_limit: params.mergeset_size_limit,
