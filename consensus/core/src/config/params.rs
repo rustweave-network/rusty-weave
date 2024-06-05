@@ -294,31 +294,12 @@ impl From<NetworkId> for Params {
 }
 
 pub const MAINNET_PARAMS: Params = Params {
-    dns_seeders: &[
-        // This DNS seeder is run by Denis Mashkevich
-        "mainnet-dnsseed-1.kaspanet.org",
-        // This DNS seeder is run by Denis Mashkevich
-        "mainnet-dnsseed-2.kaspanet.org",
-        // This DNS seeder is run by Constantine Bytensky
-        "dnsseed.cbytensky.org",
-        // This DNS seeder is run by Georges Künzli
-        "seeder1.kaspad.net",
-        // This DNS seeder is run by Georges Künzli
-        "seeder2.kaspad.net",
-        // This DNS seeder is run by Georges Künzli
-        "seeder3.kaspad.net",
-        // This DNS seeder is run by Georges Künzli
-        "seeder4.kaspad.net",
-        // This DNS seeder is run by Tim
-        "kaspadns.kaspacalc.net",
-        // This DNS seeder is run by supertypo
-        "n-mainnet.kaspa.ws",
-    ],
+    dns_seeders: &["mainnet-dnsseed.rustweave.com"],
     net: NetworkId::new(NetworkType::Mainnet),
     dev_fee: 2,
     dev_fee_script: &[
-        0x20, 0x39, 0xff, 0x8, 0x90, 0xd7, 0x56, 0x2d, 0x1c, 0xe5, 0x24, 0xc1, 0xf6, 0x9b, 0xd7, 0x9b, 0x76, 0x66, 0x77, 0x95, 0x14,
-        0xb6, 0x91, 0x42, 0x18, 0xb4, 0x0, 0xf1, 0x2b, 0xaa, 0xac, 0x2, 0x18, 0xac,
+        0x20, 0xd6, 0xa8, 0x2, 0x68, 0x97, 0x4e, 0xb1, 0x60, 0xb4, 0x25, 0x45, 0xc8, 0x9d, 0xde, 0xd5, 0x39, 0x56, 0x45, 0x3e, 0xee,
+        0x6a, 0xa0, 0x98, 0xd9, 0x88, 0x68, 0x67, 0xeb, 0x4e, 0xc0, 0x82, 0xca, 0xac,
     ],
     genesis: GENESIS,
     ghostdag_k: LEGACY_DEFAULT_GHOSTDAG_K,
