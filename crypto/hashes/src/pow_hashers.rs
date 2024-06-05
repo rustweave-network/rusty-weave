@@ -7,9 +7,6 @@ pub struct PowHash(blake3::Hasher);
 pub struct KHeavyHash;
 
 impl PowHash {
-    // The initial state of `cSHAKE256("ProofOfWorkHash")`
-    // [10] -> 1123092876221303310 ^ 0x04(padding byte) = 1123092876221303306
-    // [16] -> 10306167911662716186 ^ 0x8000000000000000(final padding) = 1082795874807940378
     #[inline]
     pub fn new(pre_pow_hash: Hash, timestamp: u64) -> Self {
         let mut hasher = blake3::Hasher::new();
@@ -29,25 +26,11 @@ impl PowHash {
 }
 
 impl KHeavyHash {
-    // The initial state of `cSHAKE256("HeavyHash")`
-    // [4] -> 16654558671554924254 ^ 0x04(padding byte) = 16654558671554924250
-    // [16] -> 9793466274154320918 ^ 0x8000000000000000(final padding) = 570094237299545110
-    #[rustfmt::skip]
-    const INITIAL_STATE: [u64; 25] = [
-        4239941492252378377, 8746723911537738262, 8796936657246353646, 1272090201925444760, 16654558671554924250,
-        8270816933120786537, 13907396207649043898, 6782861118970774626, 9239690602118867528, 11582319943599406348,
-        17596056728278508070, 15212962468105129023, 7812475424661425213, 3370482334374859748, 5690099369266491460,
-        8596393687355028144, 570094237299545110, 9119540418498120711, 16901969272480492857, 13372017233735502424,
-        14372891883993151831, 5171152063242093102, 10573107899694386186, 6096431547456407061, 1592359455985097269,
-    ];
     #[inline]
     pub fn hash(in_hash: Hash) -> Hash {
-        let mut state = Self::INITIAL_STATE;
-        for (pre_pow_word, state_word) in in_hash.iter_le_u64().zip(state.iter_mut()) {
-            *state_word ^= pre_pow_word;
-        }
-        keccak256::f1600(&mut state);
-        Hash::from_le_u64(state[..4].try_into().unwrap())
+        let mut hasher = blake3::Hasher::new();
+        hasher.update(&in_hash.as_bytes());
+        Hash(*hasher.finalize().as_bytes())
     }
 }
 
