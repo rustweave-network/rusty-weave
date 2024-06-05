@@ -130,13 +130,10 @@ impl VirtualStateProcessor {
 
             let coinbase_data = self.coinbase_manager.deserialize_coinbase_payload(&txs[0].payload).unwrap();
 
-            let dev_fee = coinbase_data.subsidy / 100 * self.dev_fee.clone();
-            let block_reward = coinbase_data.subsidy - dev_fee;
-
-            ctx.mergeset_rewards
-                .insert(merged_block, BlockRewardData::new(block_reward, block_fee, coinbase_data.miner_data.script_public_key));
-
-            ctx.mergeset_rewards.insert(merged_block, BlockRewardData::new(dev_fee, 0, self.dev_fee_script.clone()));
+            ctx.mergeset_rewards.insert(
+                merged_block,
+                BlockRewardData::new(coinbase_data.subsidy, block_fee, coinbase_data.miner_data.script_public_key),
+            );
         }
 
         // Make sure accepted tx ids are sorted before building the merkle root
@@ -207,6 +204,7 @@ impl VirtualStateProcessor {
             .expected_coinbase_transaction(daa_score, miner_data, ghostdag_data, mergeset_rewards, mergeset_non_daa)
             .unwrap()
             .tx;
+
         if hashing::tx::hash(coinbase, false) != hashing::tx::hash(&expected_coinbase, false) {
             Err(BadCoinbaseTransaction)
         } else {

@@ -5,6 +5,7 @@ use kaspa_consensus_core::{
     tx::{ScriptPublicKey, ScriptVec, Transaction, TransactionOutput},
     BlockHashMap, BlockHashSet,
 };
+use kaspa_core::info;
 use std::{convert::TryInto, mem::size_of};
 
 use crate::{constants, model::stores::ghostdag::GhostdagData};
@@ -26,6 +27,8 @@ pub type SubsidyByMonthTable = [u64; SUBSIDY_BY_MONTH_TABLE_SIZE];
 
 #[derive(Clone)]
 pub struct CoinbaseManager {
+    dev_fee: u64,
+    dev_fee_script: ScriptPublicKey,
     coinbase_payload_script_public_key_max_len: u8,
     max_coinbase_payload_len: usize,
     deflationary_phase_daa_score: u64,
@@ -59,6 +62,8 @@ impl<'a> PayloadParser<'a> {
 
 impl CoinbaseManager {
     pub fn new(
+        dev_fee: u64,
+        dev_fee_script: &[u8],
         coinbase_payload_script_public_key_max_len: u8,
         max_coinbase_payload_len: usize,
         deflationary_phase_daa_score: u64,
@@ -74,6 +79,8 @@ impl CoinbaseManager {
         // In a 10 BPS network, the induced increase in total rewards is 51 KAS (see tests::calc_high_bps_total_rewards_delta())
         let subsidy_by_month_table: SubsidyByMonthTable = core::array::from_fn(|i| (SUBSIDY_BY_MONTH_TABLE[i] + bps - 1) / bps);
         Self {
+            dev_fee,
+            dev_fee_script: ScriptPublicKey::from_vec(0, dev_fee_script.to_vec()),
             coinbase_payload_script_public_key_max_len,
             max_coinbase_payload_len,
             deflationary_phase_daa_score,
@@ -105,8 +112,11 @@ impl CoinbaseManager {
         for blue in ghostdag_data.mergeset_blues.iter().filter(|h| !mergeset_non_daa.contains(h)) {
             let reward_data = mergeset_rewards.get(blue).unwrap();
             if reward_data.subsidy + reward_data.total_fees > 0 {
-                outputs
-                    .push(TransactionOutput::new(reward_data.subsidy + reward_data.total_fees, reward_data.script_public_key.clone()));
+                let dev_fee = reward_data.subsidy / 100 * self.dev_fee.clone();
+                let block_reward = reward_data.subsidy - dev_fee;
+
+                outputs.push(TransactionOutput::new(block_reward + reward_data.total_fees, reward_data.script_public_key.clone()));
+                outputs.push(TransactionOutput::new(dev_fee, self.dev_fee_script.clone()));
             }
         }
 
@@ -477,6 +487,8 @@ mod tests {
 
     fn create_manager(params: &Params) -> CoinbaseManager {
         CoinbaseManager::new(
+            params.dev_fee.clone(),
+            params.dev_fee_script,
             params.coinbase_payload_script_public_key_max_len,
             params.max_coinbase_payload_len,
             params.deflationary_phase_daa_score,
@@ -487,6 +499,6 @@ mod tests {
 
     /// Return a CoinbaseManager with legacy golang 1 BPS properties
     fn create_legacy_manager() -> CoinbaseManager {
-        CoinbaseManager::new(150, 204, 15778800 - 259200, 50000000000, 1000)
+        CoinbaseManager::new(0, &[], 150, 204, 15778800 - 259200, 50000000000, 1000)
     }
 }

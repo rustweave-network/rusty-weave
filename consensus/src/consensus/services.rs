@@ -133,6 +133,8 @@ impl ConsensusServices {
         let ghostdag_primary_manager = ghostdag_managers[0].clone();
 
         let coinbase_manager = CoinbaseManager::new(
+            params.dev_fee.clone(),
+            params.dev_fee_script,
             params.coinbase_payload_script_public_key_max_len,
             params.max_coinbase_payload_len,
             params.deflationary_phase_daa_score,
