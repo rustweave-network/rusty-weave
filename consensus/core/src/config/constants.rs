@@ -57,7 +57,7 @@ pub mod consensus {
     //
 
     /// Minimal size of the difficulty window. Affects the DA algorithm only at the starting period of a new net
-    pub const MIN_DIFFICULTY_WINDOW_LEN: usize = 10;
+    pub const MIN_DIFFICULTY_WINDOW_LEN: usize = 2641;
 
     /// **Legacy** difficulty adjustment window size corresponding to ~44 minutes with 1 BPS
     pub const LEGACY_DIFFICULTY_WINDOW_SIZE: usize = 2641;
@@ -71,8 +71,7 @@ pub mod consensus {
     pub const DIFFICULTY_WINDOW_SAMPLE_INTERVAL: u64 = 4;
 
     /// Size of the **sampled** difficulty window (independent of BPS)
-    pub const DIFFICULTY_SAMPLED_WINDOW_SIZE: u64 =
-        (NEW_DIFFICULTY_WINDOW_DURATION + DIFFICULTY_WINDOW_SAMPLE_INTERVAL - 1) / DIFFICULTY_WINDOW_SAMPLE_INTERVAL;
+    pub const DIFFICULTY_SAMPLED_WINDOW_SIZE: u64 = 2641;
 
     //
     // ~~~~~~~~~~~~~~~~~~~ Finality & Pruning ~~~~~~~~~~~~~~~~~~~

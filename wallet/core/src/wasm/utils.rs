@@ -33,8 +33,8 @@ pub fn sompi_to_kaspa_string(sompi: ISompiToRustweave) -> Result<String> {
 
 ///
 /// Format a Sompi amount to a string representation of the amount in Rustweave with a suffix
-/// based on the network type (e.g. `KAS` for mainnet, `TKAS` for testnet,
-/// `SKAS` for simnet, `DKAS` for devnet).
+/// based on the network type (e.g. `RWE` for mainnet, `TRWE` for testnet,
+/// `SRWE` for simnet, `DRWE` for devnet).
 ///
 /// @category Wallet SDK
 ///
