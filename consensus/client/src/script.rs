@@ -10,7 +10,7 @@ use kaspa_txscript::script_builder as native;
 #[wasm_bindgen(typescript_custom_section)]
 const TS_SCRIPT_OPCODES: &'static str = r#"
 /**
- * Kaspa Transaction Script Opcodes
+ * Rustweave Transaction Script Opcodes
  * @see {@link ScriptBuilder}
  * @category Consensus
  */

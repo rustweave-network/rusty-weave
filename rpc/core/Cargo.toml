@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-rpc-core"
-description = "Kaspa RPC core"
+description = "Rustweave RPC core"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true

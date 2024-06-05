@@ -4,7 +4,7 @@ use kaspa_consensus_core::tx::TransactionId;
 use kaspa_core::debug;
 use kaspa_p2p_lib::{
     make_message,
-    pb::{kaspad_message::Payload, InvTransactionsMessage, KaspadMessage},
+    pb::{rustweaved_message::Payload, InvTransactionsMessage, RustweavedMessage},
     Hub,
 };
 use std::time::{Duration, Instant};
@@ -95,7 +95,7 @@ impl TransactionsSpread {
         self.last_broadcast_time = Instant::now();
     }
 
-    async fn broadcast(&self, msg: KaspadMessage, should_throttle: bool) {
+    async fn broadcast(&self, msg: RustweavedMessage, should_throttle: bool) {
         if should_throttle {
             // TODO: Figure out a better number
             self.hub.broadcast_to_some_peers(msg, 8).await

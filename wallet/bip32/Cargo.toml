@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-bip32"
-description = "BIP32 for Kaspa"
+description = "BIP32 for Rustweave"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true

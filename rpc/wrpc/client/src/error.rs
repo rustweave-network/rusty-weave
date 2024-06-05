@@ -20,10 +20,10 @@ pub enum Error {
     #[error("wRPC -> {0}")]
     RpcError(#[from] RpcError),
 
-    #[error("Kaspa RpcApi -> {0}")]
+    #[error("Rustweave RpcApi -> {0}")]
     RpcApiError(#[from] kaspa_rpc_core::error::RpcError),
 
-    #[error("Kaspa RpcApi -> {0}")]
+    #[error("Rustweave RpcApi -> {0}")]
     WebSocketError(#[from] WebSocketError),
 
     #[error("Notification subsystem -> {0}")]

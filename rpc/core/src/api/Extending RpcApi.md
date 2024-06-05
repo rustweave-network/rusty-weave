@@ -29,15 +29,15 @@ As an illustration, let's pretend that we add a new `submit_block` method.
 
 1. In file `rpc\grpc\proto\rpc.proto`, create a request message and a response message
    (ie. `SubmitBlockRequestMessage` and `SubmitBlockResponseMessage`).
-2. In file `rpc\grpc\proto\messages.proto`, add respectively a request and a response to the payload of `KaspadRequest` and `KaspadResponse`.
+2. In file `rpc\grpc\proto\messages.proto`, add respectively a request and a response to the payload of `RustweavedRequest` and `RustweavedResponse`.
    (ie. `SubmitBlockRequestMessage submitBlockRequest = 1003;` and `SubmitBlockResponseMessage submitBlockResponse = 1004;`)
 3. In `rpc\grpc\src\convert\message.rs`, implement converters to handle rpc-core <-> rpc-grpc.
 4. If appropriate, implement a matcher in `kaspa_grpc_client::resolver::matcher`.
-5. Complete the `Matcher` trait implementation for `kaspad_request::Payload`.
+5. Complete the `Matcher` trait implementation for `rustweaved_request::Payload`.
 6. In `rpc\grpc\src\convert\kaspad.rs`, complete the `From` implementations for `RpcApiOps`.
-7. In `rpc\grpc\src\convert\kaspad.rs`, add calls to `impl_into_kaspad_request!` and `impl_into_kaspad_response!`
-   (ie. `impl_into_kaspad_request!(kaspa_rpc_core::SubmitBlockRequest, SubmitBlockRequestMessage, SubmitBlockRequest);` and
-   `impl_into_kaspad_response!(kaspa_rpc_core::SubmitBlockResponse, SubmitBlockResponseMessage, SubmitBlockResponse);`).
+7. In `rpc\grpc\src\convert\kaspad.rs`, add calls to `impl_into_rustweaved_request!` and `impl_into_rustweaved_response!`
+   (ie. `impl_into_rustweaved_request!(kaspa_rpc_core::SubmitBlockRequest, SubmitBlockRequestMessage, SubmitBlockRequest);` and
+   `impl_into_rustweaved_response!(kaspa_rpc_core::SubmitBlockResponse, SubmitBlockResponseMessage, SubmitBlockResponse);`).
 8. Implement the function having a `_call` suffix into `kaspa_grpc_client::GrpcClient`.
 9. In `kaspa_grpc_server::service::RpcService::message_stream`, requests handler, add an arm and implement
    a handler for the new method.

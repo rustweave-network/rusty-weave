@@ -1,11 +1,11 @@
 
-<h1>Kaspa On Rust</h1>
+<h1>Rustweave On Rust</h1>
 
-Welcome to the Rust-based implementation of the Kaspa full-node and its ancillary libraries. The contained node release serves as a drop-in replacement to the established <a href="https://github.com/kaspanet/kaspad">Golang node</a> and to date is the recommended node software for the Kaspa network, introducing developers to the possibilities of Rust in the Kaspa network's context.
+Welcome to the Rust-based implementation of the Rustweave full-node and its ancillary libraries. The contained node release serves as a drop-in replacement to the established <a href="https://github.com/kaspanet/kaspad">Golang node</a> and to date is the recommended node software for the Rustweave network, introducing developers to the possibilities of Rust in the Rustweave network's context.
 
 We invite developers and blockchain enthusiasts to collaborate, test, and optimize our Rust implementation. Each line of code here is an opportunity to contribute to the open-source blockchain movement, shaping a platform designed for scalability and speed without compromising on decentralization.
 
-Your feedback, contributions, and issue reports will be integral to evolving this codebase and continuing its maturity as a reliable node in the Kaspa network.
+Your feedback, contributions, and issue reports will be integral to evolving this codebase and continuing its maturity as a reliable node in the Rustweave network.
 
 ## Installation
   <details>
@@ -180,11 +180,11 @@ To build WASM on MacOS you need to install `llvm` from homebrew (at the time of 
 <details>
 
 <summary>
-Kaspa CLI + Wallet
+Rustweave CLI + Wallet
 </summary>
 `kaspa-cli` crate provides cli-driven RPC interface to the node and a
-terminal interface to the Rusty Kaspa Wallet runtime. These wallets are
-compatible with WASM SDK Wallet API and Kaspa NG projects.
+terminal interface to the Rusty Rustweave Wallet runtime. These wallets are
+compatible with WASM SDK Wallet API and Rustweave NG projects.
 
 
 ```bash
@@ -294,7 +294,7 @@ wRPC
 
   **Sidenote:**
 
-  Rusty Kaspa integrates an optional wRPC
+  Rusty Rustweave integrates an optional wRPC
   subsystem. wRPC is a high-performance, platform-neutral, Rust-centric, WebSocket-framed RPC 
   implementation that can use [Borsh](https://borsh.io/) and JSON protocol encoding.
 
@@ -306,10 +306,10 @@ wRPC
   both client and server should be built from the same codebase.  
 
   JSON protocol is based on 
-  Kaspa data structures and is data-structure-version agnostic. You can connect to the
+  Rustweave data structures and is data-structure-version agnostic. You can connect to the
   JSON endpoint using any WebSocket library. Built-in RPC clients for JavaScript and
   TypeScript capable of running in web browsers and Node.js are available as a part of
-  the Kaspa WASM framework.
+  the Rustweave WASM framework.
 
 </details>
 

@@ -121,7 +121,7 @@ pub enum Error {
     MetricsError(kaspa_metrics_core::error::Error),
 
     #[error(transparent)]
-    KaspaWalletKeys(#[from] kaspa_wallet_keys::error::Error),
+    RustweaveWalletKeys(#[from] kaspa_wallet_keys::error::Error),
 }
 
 impl Error {

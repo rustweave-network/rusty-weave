@@ -1,13 +1,13 @@
 use crate::imports::*;
 
 #[derive(Default, Handler)]
-#[help("Send a Kaspa transaction to a public address")]
+#[help("Send a Rustweave transaction to a public address")]
 pub struct Send;
 
 impl Send {
     async fn main(self: Arc<Self>, ctx: &Arc<dyn Context>, argv: Vec<String>, _cmd: &str) -> Result<()> {
         // address, amount, priority fee
-        let ctx = ctx.clone().downcast_arc::<KaspaCli>()?;
+        let ctx = ctx.clone().downcast_arc::<RustweaveCli>()?;
 
         let account = ctx.wallet().account()?;
 

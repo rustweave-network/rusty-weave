@@ -3,7 +3,7 @@ use kaspa_core::debug;
 use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue_with_request_id, make_message, make_response,
-    pb::{kaspad_message::Payload, InvRelayBlockMessage},
+    pb::{rustweaved_message::Payload, InvRelayBlockMessage},
     IncomingRoute, Router,
 };
 use std::sync::Arc;

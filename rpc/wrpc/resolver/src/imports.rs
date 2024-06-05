@@ -14,7 +14,7 @@ pub use kaspa_rpc_core::api::rpc::RpcApi;
 pub use kaspa_utils::hashmap::GroupExtension;
 pub use kaspa_wrpc_client::{
     client::{ConnectOptions, ConnectStrategy},
-    KaspaRpcClient, WrpcEncoding,
+    RustweaveRpcClient, WrpcEncoding,
 };
 pub use serde::{de::DeserializeOwned, Deserialize, Serialize};
 pub use std::collections::HashMap;

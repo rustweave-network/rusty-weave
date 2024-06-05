@@ -1,9 +1,9 @@
 //!
-//! Kaspa Wallet Core - Multi-platform Rust framework for Kaspa Wallet.
+//! Rustweave Wallet Core - Multi-platform Rust framework for Rustweave Wallet.
 //!
 //! This framework provides a series of APIs and primitives
 //! to simplify building applications that interface with
-//! the Kaspa p2p network.
+//! the Rustweave p2p network.
 //!
 //! Included are low-level primitives
 //! such as [`UtxoProcessor`](crate::utxo::UtxoProcessor)
@@ -47,7 +47,7 @@
 //! <https://github.com/kaspanet/rusty-kaspa/tree/master/wasm/nodejs>
 //!
 //! For pre-built browser-compatible WASM32 redistributables of this
-//! framework please see the releases section of the Rusty Kaspa
+//! framework please see the releases section of the Rusty Rustweave
 //! repository at <https://github.com/kaspanet/rusty-kaspa/releases>.
 //!
 

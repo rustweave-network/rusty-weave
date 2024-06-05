@@ -9,7 +9,7 @@ use std::fmt::Display;
 use crate::imports::*;
 pub use crate::result::Result;
 pub use cpu_miner::{CpuMiner, CpuMinerConfig, CpuMinerCtl};
-pub use kaspad::{Kaspad, KaspadConfig, KaspadCtl};
+pub use kaspad::{Rustweaved, RustweavedConfig, RustweavedCtl};
 use workflow_core::runtime;
 use workflow_node::process::Event as ProcessEvent;
 use workflow_store::fs::*;
@@ -54,13 +54,13 @@ pub async fn locate_binaries(root: &str, name: &str) -> Result<Vec<PathBuf>> {
 
 #[derive(Debug, Clone, BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 pub enum DaemonKind {
-    Kaspad,
+    Rustweaved,
     CpuMiner,
 }
 
 #[derive(Default)]
 pub struct Daemons {
-    pub kaspad: Option<Arc<dyn KaspadCtl + Send + Sync + 'static>>,
+    pub kaspad: Option<Arc<dyn RustweavedCtl + Send + Sync + 'static>>,
     // pub kaspad_automute : Arc<
     pub cpu_miner: Option<Arc<dyn CpuMinerCtl + Send + Sync + 'static>>,
 }
@@ -70,7 +70,7 @@ impl Daemons {
         Self { kaspad: None, cpu_miner: None }
     }
 
-    pub fn with_kaspad(mut self, kaspad: Arc<dyn KaspadCtl + Send + Sync + 'static>) -> Self {
+    pub fn with_kaspad(mut self, kaspad: Arc<dyn RustweavedCtl + Send + Sync + 'static>) -> Self {
         self.kaspad = Some(kaspad);
         self
     }
@@ -80,11 +80,11 @@ impl Daemons {
         self
     }
 
-    pub fn kaspad(&self) -> Arc<dyn KaspadCtl + Send + Sync + 'static> {
+    pub fn kaspad(&self) -> Arc<dyn RustweavedCtl + Send + Sync + 'static> {
         self.kaspad.as_ref().expect("accessing Daemons::kaspad while kaspad option is None").clone()
     }
 
-    pub fn try_kaspad(&self) -> Option<Arc<dyn KaspadCtl + Send + Sync + 'static>> {
+    pub fn try_kaspad(&self) -> Option<Arc<dyn RustweavedCtl + Send + Sync + 'static>> {
         self.kaspad.clone()
     }
 

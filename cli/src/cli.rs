@@ -8,7 +8,7 @@ use crate::result::Result;
 use kaspa_daemon::{DaemonEvent, DaemonKind, Daemons};
 use kaspa_wallet_core::rpc::DynRpcApi;
 use kaspa_wallet_core::storage::{IdT, PrvKeyDataInfo};
-use kaspa_wrpc_client::KaspaRpcClient;
+use kaspa_wrpc_client::RustweaveRpcClient;
 use workflow_core::channel::*;
 use workflow_core::time::Instant;
 use workflow_log::*;
@@ -29,7 +29,7 @@ impl Options {
     }
 }
 
-pub struct KaspaCli {
+pub struct RustweaveCli {
     term: Arc<Mutex<Option<Arc<Terminal>>>>,
     wallet: Arc<Wallet>,
     notifications_task_ctl: DuplexChannel,
@@ -45,19 +45,19 @@ pub struct KaspaCli {
     sync_state: Mutex<Option<SyncState>>,
 }
 
-impl From<&KaspaCli> for Arc<Terminal> {
-    fn from(ctx: &KaspaCli) -> Arc<Terminal> {
+impl From<&RustweaveCli> for Arc<Terminal> {
+    fn from(ctx: &RustweaveCli) -> Arc<Terminal> {
         ctx.term()
     }
 }
 
-impl AsRef<KaspaCli> for KaspaCli {
+impl AsRef<RustweaveCli> for RustweaveCli {
     fn as_ref(&self) -> &Self {
         self
     }
 }
 
-impl workflow_log::Sink for KaspaCli {
+impl workflow_log::Sink for RustweaveCli {
     fn write(&self, _target: Option<&str>, _level: Level, args: &std::fmt::Arguments<'_>) -> bool {
         if let Some(term) = self.try_term() {
             cfg_if! {
@@ -84,7 +84,7 @@ impl workflow_log::Sink for KaspaCli {
     }
 }
 
-impl KaspaCli {
+impl RustweaveCli {
     pub fn init() {
         cfg_if! {
             if #[cfg(not(target_arch = "wasm32"))] {
@@ -104,7 +104,7 @@ impl KaspaCli {
     pub async fn try_new_arc(options: Options) -> Result<Arc<Self>> {
         let wallet = Arc::new(Wallet::try_new(Wallet::local_store()?, None, None)?);
 
-        let kaspa_cli = Arc::new(KaspaCli {
+        let kaspa_cli = Arc::new(RustweaveCli {
             term: Arc::new(Mutex::new(None)),
             wallet,
             notifications_task_ctl: DuplexChannel::oneshot(),
@@ -164,7 +164,7 @@ impl KaspaCli {
         self.wallet.try_rpc_api().clone()
     }
 
-    pub fn try_rpc_client(&self) -> Option<Arc<KaspaRpcClient>> {
+    pub fn try_rpc_client(&self) -> Option<Arc<RustweaveRpcClient>> {
         self.wallet.try_wrpc_client().clone()
     }
 
@@ -218,7 +218,7 @@ impl KaspaCli {
 
     pub async fn handle_daemon_event(self: &Arc<Self>, event: DaemonEvent) -> Result<()> {
         match event.kind() {
-            DaemonKind::Kaspad => {
+            DaemonKind::Rustweaved => {
                 let node = self.node.lock().unwrap().clone();
                 if let Some(node) = node {
                     node.handle_event(self, event.into()).await?;
@@ -285,10 +285,10 @@ impl KaspaCli {
                         if let Ok(msg) = msg {
                             match *msg {
                                 Events::WalletPing => {
-                                    // log_info!("Kaspa NG - received wallet ping");
+                                    // log_info!("Rustweave NG - received wallet ping");
                                 },
                                 Events::Metrics { network_id : _, metrics : _ } => {
-                                    // log_info!("Kaspa NG - received metrics event {metrics:?}")
+                                    // log_info!("Rustweave NG - received metrics event {metrics:?}")
                                 }
                                 Events::Error { message } => { terrorln!(this,"{message}"); },
                                 Events::UtxoProcStart => {},
@@ -306,7 +306,7 @@ impl KaspaCli {
                                     this.term().refresh_prompt();
                                 },
                                 Events::UtxoIndexNotEnabled { .. } => {
-                                    tprintln!(this, "Error: Kaspa node UTXO index is not enabled...")
+                                    tprintln!(this, "Error: Rustweave node UTXO index is not enabled...")
                                 },
                                 Events::SyncState { sync_state } => {
 
@@ -326,16 +326,16 @@ impl KaspaCli {
                                     ..
                                 } => {
 
-                                    tprintln!(this, "Connected to Kaspa node version {server_version} at {}", url.unwrap_or("N/A".to_string()));
+                                    tprintln!(this, "Connected to Rustweave node version {server_version} at {}", url.unwrap_or("N/A".to_string()));
 
                                     let is_open = this.wallet.is_open();
 
                                     if !is_synced {
                                         if is_open {
-                                            terrorln!(this, "Unable to update the wallet state - Kaspa node is currently syncing with the network...");
+                                            terrorln!(this, "Unable to update the wallet state - Rustweave node is currently syncing with the network...");
 
                                         } else {
-                                            terrorln!(this, "Kaspa node is currently syncing with the network, please wait for the sync to complete...");
+                                            terrorln!(this, "Rustweave node is currently syncing with the network, please wait for the sync to complete...");
                                         }
                                     }
 
@@ -741,7 +741,7 @@ impl KaspaCli {
 }
 
 #[async_trait]
-impl Cli for KaspaCli {
+impl Cli for RustweaveCli {
     fn init(self: Arc<Self>, term: &Arc<Terminal>) -> TerminalResult<()> {
         *self.term.lock().unwrap() = Some(term.clone());
 
@@ -820,13 +820,13 @@ impl Cli for KaspaCli {
     }
 }
 
-impl cli::Context for KaspaCli {
+impl cli::Context for RustweaveCli {
     fn term(&self) -> Arc<Terminal> {
         self.term.lock().unwrap().as_ref().unwrap().clone()
     }
 }
 
-impl KaspaCli {}
+impl RustweaveCli {}
 
 #[allow(dead_code)]
 async fn select_item<T>(
@@ -916,13 +916,13 @@ where
 // }
 
 pub async fn kaspa_cli(terminal_options: TerminalOptions, banner: Option<String>) -> Result<()> {
-    KaspaCli::init();
+    RustweaveCli::init();
 
     let options = Options::new(terminal_options, None);
-    let cli = KaspaCli::try_new_arc(options).await?;
+    let cli = RustweaveCli::try_new_arc(options).await?;
 
     let banner =
-        banner.unwrap_or_else(|| format!("Kaspa Cli Wallet v{} (type 'help' for list of commands)", env!("CARGO_PKG_VERSION")));
+        banner.unwrap_or_else(|| format!("Rustweave Cli Wallet v{} (type 'help' for list of commands)", env!("CARGO_PKG_VERSION")));
     cli.term().writeln(banner);
 
     // redirect the global log output to terminal
@@ -995,7 +995,7 @@ mod panic_handler {
     }
 }
 
-impl KaspaCli {
+impl RustweaveCli {
     pub fn init_panic_hook(self: &Arc<Self>) {
         let this = self.clone();
         let handler = move |info: &std::panic::PanicInfo| {

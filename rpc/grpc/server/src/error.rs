@@ -1,4 +1,4 @@
-use kaspa_grpc_core::ops::KaspadPayloadOps;
+use kaspa_grpc_core::ops::RustweavedPayloadOps;
 use thiserror::Error;
 use tokio::sync::mpsc::error::TrySendError;
 
@@ -20,7 +20,7 @@ pub enum GrpcServerError {
     MethodNotImplemented,
 
     #[error("{0:?} handler is closed")]
-    ClosedHandler(KaspadPayloadOps),
+    ClosedHandler(RustweavedPayloadOps),
 
     #[error("client connection is closed")]
     ConnectionClosed,

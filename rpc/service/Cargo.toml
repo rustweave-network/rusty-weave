@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-rpc-service"
-description = "Kaspa RPC service"
+description = "Rustweave RPC service"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true

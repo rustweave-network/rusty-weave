@@ -1,108 +1,108 @@
-use crate::protowire::{kaspad_request, KaspadRequest, KaspadResponse};
+use crate::protowire::{rustweaved_request, RustweavedRequest, RustweavedResponse};
 
-impl From<kaspad_request::Payload> for KaspadRequest {
-    fn from(item: kaspad_request::Payload) -> Self {
-        KaspadRequest { id: 0, payload: Some(item) }
+impl From<rustweaved_request::Payload> for RustweavedRequest {
+    fn from(item: rustweaved_request::Payload) -> Self {
+        RustweavedRequest { id: 0, payload: Some(item) }
     }
 }
 
-impl AsRef<KaspadRequest> for KaspadRequest {
+impl AsRef<RustweavedRequest> for RustweavedRequest {
     fn as_ref(&self) -> &Self {
         self
     }
 }
 
-impl AsRef<KaspadResponse> for KaspadResponse {
+impl AsRef<RustweavedResponse> for RustweavedResponse {
     fn as_ref(&self) -> &Self {
         self
     }
 }
 
-pub mod kaspad_request_convert {
+pub mod rustweaved_request_convert {
     use crate::protowire::*;
     use kaspa_rpc_core::{RpcError, RpcResult};
 
-    impl_into_kaspad_request!(Shutdown);
-    impl_into_kaspad_request!(SubmitBlock);
-    impl_into_kaspad_request!(GetBlockTemplate);
-    impl_into_kaspad_request!(GetBlock);
-    impl_into_kaspad_request!(GetInfo);
+    impl_into_rustweaved_request!(Shutdown);
+    impl_into_rustweaved_request!(SubmitBlock);
+    impl_into_rustweaved_request!(GetBlockTemplate);
+    impl_into_rustweaved_request!(GetBlock);
+    impl_into_rustweaved_request!(GetInfo);
 
-    impl_into_kaspad_request!(GetCurrentNetwork);
-    impl_into_kaspad_request!(GetPeerAddresses);
-    impl_into_kaspad_request!(GetSink);
-    impl_into_kaspad_request!(GetMempoolEntry);
-    impl_into_kaspad_request!(GetMempoolEntries);
-    impl_into_kaspad_request!(GetConnectedPeerInfo);
-    impl_into_kaspad_request!(AddPeer);
-    impl_into_kaspad_request!(SubmitTransaction);
-    impl_into_kaspad_request!(GetSubnetwork);
-    impl_into_kaspad_request!(GetVirtualChainFromBlock);
-    impl_into_kaspad_request!(GetBlocks);
-    impl_into_kaspad_request!(GetBlockCount);
-    impl_into_kaspad_request!(GetBlockDagInfo);
-    impl_into_kaspad_request!(ResolveFinalityConflict);
-    impl_into_kaspad_request!(GetHeaders);
-    impl_into_kaspad_request!(GetUtxosByAddresses);
-    impl_into_kaspad_request!(GetBalanceByAddress);
-    impl_into_kaspad_request!(GetBalancesByAddresses);
-    impl_into_kaspad_request!(GetSinkBlueScore);
-    impl_into_kaspad_request!(Ban);
-    impl_into_kaspad_request!(Unban);
-    impl_into_kaspad_request!(EstimateNetworkHashesPerSecond);
-    impl_into_kaspad_request!(GetMempoolEntriesByAddresses);
-    impl_into_kaspad_request!(GetCoinSupply);
-    impl_into_kaspad_request!(Ping);
-    impl_into_kaspad_request!(GetMetrics);
-    impl_into_kaspad_request!(GetServerInfo);
-    impl_into_kaspad_request!(GetSyncStatus);
-    impl_into_kaspad_request!(GetDaaScoreTimestampEstimate);
+    impl_into_rustweaved_request!(GetCurrentNetwork);
+    impl_into_rustweaved_request!(GetPeerAddresses);
+    impl_into_rustweaved_request!(GetSink);
+    impl_into_rustweaved_request!(GetMempoolEntry);
+    impl_into_rustweaved_request!(GetMempoolEntries);
+    impl_into_rustweaved_request!(GetConnectedPeerInfo);
+    impl_into_rustweaved_request!(AddPeer);
+    impl_into_rustweaved_request!(SubmitTransaction);
+    impl_into_rustweaved_request!(GetSubnetwork);
+    impl_into_rustweaved_request!(GetVirtualChainFromBlock);
+    impl_into_rustweaved_request!(GetBlocks);
+    impl_into_rustweaved_request!(GetBlockCount);
+    impl_into_rustweaved_request!(GetBlockDagInfo);
+    impl_into_rustweaved_request!(ResolveFinalityConflict);
+    impl_into_rustweaved_request!(GetHeaders);
+    impl_into_rustweaved_request!(GetUtxosByAddresses);
+    impl_into_rustweaved_request!(GetBalanceByAddress);
+    impl_into_rustweaved_request!(GetBalancesByAddresses);
+    impl_into_rustweaved_request!(GetSinkBlueScore);
+    impl_into_rustweaved_request!(Ban);
+    impl_into_rustweaved_request!(Unban);
+    impl_into_rustweaved_request!(EstimateNetworkHashesPerSecond);
+    impl_into_rustweaved_request!(GetMempoolEntriesByAddresses);
+    impl_into_rustweaved_request!(GetCoinSupply);
+    impl_into_rustweaved_request!(Ping);
+    impl_into_rustweaved_request!(GetMetrics);
+    impl_into_rustweaved_request!(GetServerInfo);
+    impl_into_rustweaved_request!(GetSyncStatus);
+    impl_into_rustweaved_request!(GetDaaScoreTimestampEstimate);
 
-    impl_into_kaspad_request!(NotifyBlockAdded);
-    impl_into_kaspad_request!(NotifyNewBlockTemplate);
-    impl_into_kaspad_request!(NotifyUtxosChanged);
-    impl_into_kaspad_request!(NotifyPruningPointUtxoSetOverride);
-    impl_into_kaspad_request!(NotifyFinalityConflict);
-    impl_into_kaspad_request!(NotifyVirtualDaaScoreChanged);
-    impl_into_kaspad_request!(NotifyVirtualChainChanged);
-    impl_into_kaspad_request!(NotifySinkBlueScoreChanged);
+    impl_into_rustweaved_request!(NotifyBlockAdded);
+    impl_into_rustweaved_request!(NotifyNewBlockTemplate);
+    impl_into_rustweaved_request!(NotifyUtxosChanged);
+    impl_into_rustweaved_request!(NotifyPruningPointUtxoSetOverride);
+    impl_into_rustweaved_request!(NotifyFinalityConflict);
+    impl_into_rustweaved_request!(NotifyVirtualDaaScoreChanged);
+    impl_into_rustweaved_request!(NotifyVirtualChainChanged);
+    impl_into_rustweaved_request!(NotifySinkBlueScoreChanged);
 
-    macro_rules! impl_into_kaspad_request {
+    macro_rules! impl_into_rustweaved_request {
         ($name:tt) => {
             paste::paste! {
-                impl_into_kaspad_request_ex!(kaspa_rpc_core::[<$name Request>],[<$name RequestMessage>],[<$name Request>]);
+                impl_into_rustweaved_request_ex!(kaspa_rpc_core::[<$name Request>],[<$name RequestMessage>],[<$name Request>]);
             }
         };
     }
 
-    use impl_into_kaspad_request;
+    use impl_into_rustweaved_request;
 
-    macro_rules! impl_into_kaspad_request_ex {
+    macro_rules! impl_into_rustweaved_request_ex {
         // ($($core_struct:ident)::+, $($protowire_struct:ident)::+, $($variant:ident)::+) => {
         ($core_struct:path, $protowire_struct:ident, $variant:ident) => {
             // ----------------------------------------------------------------------------
             // rpc_core to protowire
             // ----------------------------------------------------------------------------
 
-            impl From<&$core_struct> for kaspad_request::Payload {
+            impl From<&$core_struct> for rustweaved_request::Payload {
                 fn from(item: &$core_struct) -> Self {
                     Self::$variant(item.into())
                 }
             }
 
-            impl From<&$core_struct> for KaspadRequest {
+            impl From<&$core_struct> for RustweavedRequest {
                 fn from(item: &$core_struct) -> Self {
                     Self { id: 0, payload: Some(item.into()) }
                 }
             }
 
-            impl From<$core_struct> for kaspad_request::Payload {
+            impl From<$core_struct> for rustweaved_request::Payload {
                 fn from(item: $core_struct) -> Self {
                     Self::$variant((&item).into())
                 }
             }
 
-            impl From<$core_struct> for KaspadRequest {
+            impl From<$core_struct> for RustweavedRequest {
                 fn from(item: $core_struct) -> Self {
                     Self { id: 0, payload: Some((&item).into()) }
                 }
@@ -112,10 +112,10 @@ pub mod kaspad_request_convert {
             // protowire to rpc_core
             // ----------------------------------------------------------------------------
 
-            impl TryFrom<&kaspad_request::Payload> for $core_struct {
+            impl TryFrom<&rustweaved_request::Payload> for $core_struct {
                 type Error = RpcError;
-                fn try_from(item: &kaspad_request::Payload) -> RpcResult<Self> {
-                    if let kaspad_request::Payload::$variant(request) = item {
+                fn try_from(item: &rustweaved_request::Payload) -> RpcResult<Self> {
+                    if let rustweaved_request::Payload::$variant(request) = item {
                         request.try_into()
                     } else {
                         Err(RpcError::MissingRpcFieldError("Payload".to_string(), stringify!($variant).to_string()))
@@ -123,71 +123,71 @@ pub mod kaspad_request_convert {
                 }
             }
 
-            impl TryFrom<&KaspadRequest> for $core_struct {
+            impl TryFrom<&RustweavedRequest> for $core_struct {
                 type Error = RpcError;
-                fn try_from(item: &KaspadRequest) -> RpcResult<Self> {
+                fn try_from(item: &RustweavedRequest) -> RpcResult<Self> {
                     item.payload
                         .as_ref()
-                        .ok_or(RpcError::MissingRpcFieldError("KaspaRequest".to_string(), "Payload".to_string()))?
+                        .ok_or(RpcError::MissingRpcFieldError("RustweaveRequest".to_string(), "Payload".to_string()))?
                         .try_into()
                 }
             }
 
-            impl From<$protowire_struct> for KaspadRequest {
+            impl From<$protowire_struct> for RustweavedRequest {
                 fn from(item: $protowire_struct) -> Self {
-                    Self { id: 0, payload: Some(kaspad_request::Payload::$variant(item)) }
+                    Self { id: 0, payload: Some(rustweaved_request::Payload::$variant(item)) }
                 }
             }
 
-            impl From<$protowire_struct> for kaspad_request::Payload {
+            impl From<$protowire_struct> for rustweaved_request::Payload {
                 fn from(item: $protowire_struct) -> Self {
-                    kaspad_request::Payload::$variant(item)
+                    rustweaved_request::Payload::$variant(item)
                 }
             }
         };
     }
-    use impl_into_kaspad_request_ex;
+    use impl_into_rustweaved_request_ex;
 }
 
-pub mod kaspad_response_convert {
+pub mod rustweaved_response_convert {
     use crate::protowire::*;
     use kaspa_rpc_core::{RpcError, RpcResult};
 
-    impl_into_kaspad_response!(Shutdown);
-    impl_into_kaspad_response!(SubmitBlock);
-    impl_into_kaspad_response!(GetBlockTemplate);
-    impl_into_kaspad_response!(GetBlock);
-    impl_into_kaspad_response!(GetInfo);
-    impl_into_kaspad_response!(GetCurrentNetwork);
+    impl_into_rustweaved_response!(Shutdown);
+    impl_into_rustweaved_response!(SubmitBlock);
+    impl_into_rustweaved_response!(GetBlockTemplate);
+    impl_into_rustweaved_response!(GetBlock);
+    impl_into_rustweaved_response!(GetInfo);
+    impl_into_rustweaved_response!(GetCurrentNetwork);
 
-    impl_into_kaspad_response!(GetPeerAddresses);
-    impl_into_kaspad_response!(GetSink);
-    impl_into_kaspad_response!(GetMempoolEntry);
-    impl_into_kaspad_response!(GetMempoolEntries);
-    impl_into_kaspad_response!(GetConnectedPeerInfo);
-    impl_into_kaspad_response!(AddPeer);
-    impl_into_kaspad_response!(SubmitTransaction);
-    impl_into_kaspad_response!(GetSubnetwork);
-    impl_into_kaspad_response!(GetVirtualChainFromBlock);
-    impl_into_kaspad_response!(GetBlocks);
-    impl_into_kaspad_response!(GetBlockCount);
-    impl_into_kaspad_response!(GetBlockDagInfo);
-    impl_into_kaspad_response!(ResolveFinalityConflict);
-    impl_into_kaspad_response!(GetHeaders);
-    impl_into_kaspad_response!(GetUtxosByAddresses);
-    impl_into_kaspad_response!(GetBalanceByAddress);
-    impl_into_kaspad_response!(GetBalancesByAddresses);
-    impl_into_kaspad_response!(GetSinkBlueScore);
-    impl_into_kaspad_response!(Ban);
-    impl_into_kaspad_response!(Unban);
-    impl_into_kaspad_response!(EstimateNetworkHashesPerSecond);
-    impl_into_kaspad_response!(GetMempoolEntriesByAddresses);
-    impl_into_kaspad_response!(GetCoinSupply);
-    impl_into_kaspad_response!(Ping);
-    impl_into_kaspad_response!(GetMetrics);
-    impl_into_kaspad_response!(GetServerInfo);
-    impl_into_kaspad_response!(GetSyncStatus);
-    impl_into_kaspad_response!(GetDaaScoreTimestampEstimate);
+    impl_into_rustweaved_response!(GetPeerAddresses);
+    impl_into_rustweaved_response!(GetSink);
+    impl_into_rustweaved_response!(GetMempoolEntry);
+    impl_into_rustweaved_response!(GetMempoolEntries);
+    impl_into_rustweaved_response!(GetConnectedPeerInfo);
+    impl_into_rustweaved_response!(AddPeer);
+    impl_into_rustweaved_response!(SubmitTransaction);
+    impl_into_rustweaved_response!(GetSubnetwork);
+    impl_into_rustweaved_response!(GetVirtualChainFromBlock);
+    impl_into_rustweaved_response!(GetBlocks);
+    impl_into_rustweaved_response!(GetBlockCount);
+    impl_into_rustweaved_response!(GetBlockDagInfo);
+    impl_into_rustweaved_response!(ResolveFinalityConflict);
+    impl_into_rustweaved_response!(GetHeaders);
+    impl_into_rustweaved_response!(GetUtxosByAddresses);
+    impl_into_rustweaved_response!(GetBalanceByAddress);
+    impl_into_rustweaved_response!(GetBalancesByAddresses);
+    impl_into_rustweaved_response!(GetSinkBlueScore);
+    impl_into_rustweaved_response!(Ban);
+    impl_into_rustweaved_response!(Unban);
+    impl_into_rustweaved_response!(EstimateNetworkHashesPerSecond);
+    impl_into_rustweaved_response!(GetMempoolEntriesByAddresses);
+    impl_into_rustweaved_response!(GetCoinSupply);
+    impl_into_rustweaved_response!(Ping);
+    impl_into_rustweaved_response!(GetMetrics);
+    impl_into_rustweaved_response!(GetServerInfo);
+    impl_into_rustweaved_response!(GetSyncStatus);
+    impl_into_rustweaved_response!(GetDaaScoreTimestampEstimate);
 
     impl_into_kaspad_notify_response!(NotifyBlockAdded);
     impl_into_kaspad_notify_response!(NotifyNewBlockTemplate);
@@ -201,21 +201,21 @@ pub mod kaspad_response_convert {
     impl_into_kaspad_notify_response!(NotifyUtxosChanged, StopNotifyingUtxosChanged);
     impl_into_kaspad_notify_response!(NotifyPruningPointUtxoSetOverride, StopNotifyingPruningPointUtxoSetOverride);
 
-    macro_rules! impl_into_kaspad_response {
+    macro_rules! impl_into_rustweaved_response {
         ($name:tt) => {
             paste::paste! {
-                impl_into_kaspad_response_ex!(kaspa_rpc_core::[<$name Response>],[<$name ResponseMessage>],[<$name Response>]);
+                impl_into_rustweaved_response_ex!(kaspa_rpc_core::[<$name Response>],[<$name ResponseMessage>],[<$name Response>]);
             }
         };
         ($core_name:tt, $protowire_name:tt) => {
             paste::paste! {
-                impl_into_kaspad_response_base!(kaspa_rpc_core::[<$core_name Response>],[<$protowire_name ResponseMessage>],[<$protowire_name Response>]);
+                impl_into_rustweaved_response_base!(kaspa_rpc_core::[<$core_name Response>],[<$protowire_name ResponseMessage>],[<$protowire_name Response>]);
             }
         };
     }
-    use impl_into_kaspad_response;
+    use impl_into_rustweaved_response;
 
-    macro_rules! impl_into_kaspad_response_base {
+    macro_rules! impl_into_rustweaved_response_base {
         ($core_struct:path, $protowire_struct:ident, $variant:ident) => {
             // ----------------------------------------------------------------------------
             // rpc_core to protowire
@@ -234,61 +234,61 @@ pub mod kaspad_response_convert {
                 }
             }
 
-            impl From<$protowire_struct> for kaspad_response::Payload {
+            impl From<$protowire_struct> for rustweaved_response::Payload {
                 fn from(item: $protowire_struct) -> Self {
-                    kaspad_response::Payload::$variant(item)
+                    rustweaved_response::Payload::$variant(item)
                 }
             }
 
-            impl From<$protowire_struct> for KaspadResponse {
+            impl From<$protowire_struct> for RustweavedResponse {
                 fn from(item: $protowire_struct) -> Self {
-                    Self { id: 0, payload: Some(kaspad_response::Payload::$variant(item)) }
+                    Self { id: 0, payload: Some(rustweaved_response::Payload::$variant(item)) }
                 }
             }
         };
     }
-    use impl_into_kaspad_response_base;
+    use impl_into_rustweaved_response_base;
 
-    macro_rules! impl_into_kaspad_response_ex {
+    macro_rules! impl_into_rustweaved_response_ex {
         ($core_struct:path, $protowire_struct:ident, $variant:ident) => {
             // ----------------------------------------------------------------------------
             // rpc_core to protowire
             // ----------------------------------------------------------------------------
 
-            impl From<RpcResult<&$core_struct>> for kaspad_response::Payload {
+            impl From<RpcResult<&$core_struct>> for rustweaved_response::Payload {
                 fn from(item: RpcResult<&$core_struct>) -> Self {
-                    kaspad_response::Payload::$variant(item.into())
+                    rustweaved_response::Payload::$variant(item.into())
                 }
             }
 
-            impl From<RpcResult<&$core_struct>> for KaspadResponse {
+            impl From<RpcResult<&$core_struct>> for RustweavedResponse {
                 fn from(item: RpcResult<&$core_struct>) -> Self {
                     Self { id: 0, payload: Some(item.into()) }
                 }
             }
 
-            impl From<RpcResult<$core_struct>> for kaspad_response::Payload {
+            impl From<RpcResult<$core_struct>> for rustweaved_response::Payload {
                 fn from(item: RpcResult<$core_struct>) -> Self {
-                    kaspad_response::Payload::$variant(item.into())
+                    rustweaved_response::Payload::$variant(item.into())
                 }
             }
 
-            impl From<RpcResult<$core_struct>> for KaspadResponse {
+            impl From<RpcResult<$core_struct>> for RustweavedResponse {
                 fn from(item: RpcResult<$core_struct>) -> Self {
                     Self { id: 0, payload: Some(item.into()) }
                 }
             }
 
-            impl_into_kaspad_response_base!($core_struct, $protowire_struct, $variant);
+            impl_into_rustweaved_response_base!($core_struct, $protowire_struct, $variant);
 
             // ----------------------------------------------------------------------------
             // protowire to rpc_core
             // ----------------------------------------------------------------------------
 
-            impl TryFrom<&kaspad_response::Payload> for $core_struct {
+            impl TryFrom<&rustweaved_response::Payload> for $core_struct {
                 type Error = RpcError;
-                fn try_from(item: &kaspad_response::Payload) -> RpcResult<Self> {
-                    if let kaspad_response::Payload::$variant(response) = item {
+                fn try_from(item: &rustweaved_response::Payload) -> RpcResult<Self> {
+                    if let rustweaved_response::Payload::$variant(response) = item {
                         response.try_into()
                     } else {
                         Err(RpcError::MissingRpcFieldError("Payload".to_string(), stringify!($variant).to_string()))
@@ -296,29 +296,29 @@ pub mod kaspad_response_convert {
                 }
             }
 
-            impl TryFrom<&KaspadResponse> for $core_struct {
+            impl TryFrom<&RustweavedResponse> for $core_struct {
                 type Error = RpcError;
-                fn try_from(item: &KaspadResponse) -> RpcResult<Self> {
+                fn try_from(item: &RustweavedResponse) -> RpcResult<Self> {
                     item.payload
                         .as_ref()
-                        .ok_or(RpcError::MissingRpcFieldError("KaspaResponse".to_string(), "Payload".to_string()))?
+                        .ok_or(RpcError::MissingRpcFieldError("RustweaveResponse".to_string(), "Payload".to_string()))?
                         .try_into()
                 }
             }
         };
     }
-    use impl_into_kaspad_response_ex;
+    use impl_into_rustweaved_response_ex;
 
     macro_rules! impl_into_kaspad_notify_response {
         ($name:tt) => {
-            impl_into_kaspad_response!($name);
+            impl_into_rustweaved_response!($name);
 
             paste::paste! {
                 impl_into_kaspad_notify_response_ex!(kaspa_rpc_core::[<$name Response>],[<$name ResponseMessage>]);
             }
         };
         ($core_name:tt, $protowire_name:tt) => {
-            impl_into_kaspad_response!($core_name, $protowire_name);
+            impl_into_rustweaved_response!($core_name, $protowire_name);
 
             paste::paste! {
                 impl_into_kaspad_notify_response_ex!(kaspa_rpc_core::[<$core_name Response>],[<$protowire_name ResponseMessage>]);

@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-notify"
-description = "Kaspa notification subsystem"
+description = "Rustweave notification subsystem"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true

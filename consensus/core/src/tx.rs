@@ -52,7 +52,7 @@ impl MemSizeEstimator for UtxoEntry {}
 
 pub type TransactionIndexType = u32;
 
-/// Represents a Kaspa transaction outpoint
+/// Represents a Rustweave transaction outpoint
 #[derive(Eq, Hash, PartialEq, Debug, Copy, Clone, Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TransactionOutpoint {
@@ -73,7 +73,7 @@ impl Display for TransactionOutpoint {
     }
 }
 
-/// Represents a Kaspa transaction input
+/// Represents a Rustweave transaction input
 #[derive(Serialize, Deserialize, Clone, PartialEq, Eq, BorshSerialize, BorshDeserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TransactionInput {
@@ -105,7 +105,7 @@ impl std::fmt::Debug for TransactionInput {
     }
 }
 
-/// Represents a Kaspad transaction output
+/// Represents a Rustweaved transaction output
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, BorshSerialize, BorshDeserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct TransactionOutput {
@@ -149,7 +149,7 @@ impl BorshSerialize for TransactionMass {
     }
 }
 
-/// Represents a Kaspa transaction
+/// Represents a Rustweave transaction
 #[derive(Debug, Clone, PartialEq, Eq, Default, Serialize, Deserialize, BorshSerialize, BorshDeserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Transaction {

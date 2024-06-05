@@ -22,7 +22,7 @@ use kaspa_p2p_lib::{
     convert::model::trusted::TrustedDataPackage,
     dequeue_with_timeout, make_message,
     pb::{
-        kaspad_message::Payload, RequestAntipastMessage, RequestHeadersMessage, RequestIbdBlocksMessage,
+        rustweaved_message::Payload, RequestAntipastMessage, RequestHeadersMessage, RequestIbdBlocksMessage,
         RequestPruningPointAndItsAnticoneMessage, RequestPruningPointProofMessage, RequestPruningPointUtxoSetMessage,
     },
     IncomingRoute, Router,

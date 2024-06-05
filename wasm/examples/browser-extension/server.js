@@ -1,1 +1,1 @@
-// TODO - NodeJs HTTP server with Kaspa Wallet and a client-facing WebSocket (example backend that receives payments)
+// TODO - NodeJs HTTP server with Rustweave Wallet and a client-facing WebSocket (example backend that receives payments)

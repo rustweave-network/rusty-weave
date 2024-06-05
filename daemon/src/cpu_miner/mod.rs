@@ -178,7 +178,7 @@ impl CpuMiner {
             self.mute.load(Ordering::SeqCst),
         );
 
-        // let options = KaspadOptions::new(path,network)?;
+        // let options = RustweavedOptions::new(path,network)?;
         let process = Arc::new(Process::new(options));
         self.inner().process.replace(process.clone());
         process.run()?;

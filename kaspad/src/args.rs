@@ -482,9 +482,9 @@ fn arg_match_many_unwrap_or<T: Clone + Send + Sync + 'static>(m: &clap::ArgMatch
 
   -V, --version                             Display version information and exit
   -C, --configfile=                         Path to configuration file (default: /Users/aspect/Library/Application
-                                            Support/Kaspad/kaspad.conf)
+                                            Support/Rustweaved/kaspad.conf)
   -b, --appdir=                             Directory to store data (default: /Users/aspect/Library/Application
-                                            Support/Kaspad)
+                                            Support/Rustweaved)
       --logdir=                             Directory to log output.
   -a, --addpeer=                            Add a peer to connect with at startup
       --connect=                            Connect only to the specified peers at startup
@@ -505,9 +505,9 @@ fn arg_match_many_unwrap_or<T: Clone + Send + Sync + 'static>(m: &clap::ArgMatch
       --rpclisten=                          Add an interface/port to listen for RPC connections (default port: 16110,
                                             testnet: 16210)
       --rpccert=                            File containing the certificate file (default:
-                                            /Users/aspect/Library/Application Support/Kaspad/rpc.cert)
+                                            /Users/aspect/Library/Application Support/Rustweaved/rpc.cert)
       --rpckey=                             File containing the certificate key (default:
-                                            /Users/aspect/Library/Application Support/Kaspad/rpc.key)
+                                            /Users/aspect/Library/Application Support/Rustweaved/rpc.key)
       --rpcmaxclients=                      Max number of RPC clients for standard connections (default: 128)
       --rpcmaxwebsockets=                   Max number of RPC websocket connections (default: 25)
       --rpcmaxconcurrentreqs=               Max number of concurrent RPC requests that may be processed concurrently

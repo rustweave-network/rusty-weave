@@ -12,5 +12,5 @@ pub mod result;
 pub mod utils;
 mod wizards;
 
-pub use cli::{kaspa_cli, KaspaCli, Options, TerminalOptions, TerminalTarget};
+pub use cli::{kaspa_cli, RustweaveCli, Options, TerminalOptions, TerminalTarget};
 pub use workflow_terminal::Terminal;

@@ -18,7 +18,7 @@ use kaspa_mining::{
 use kaspa_p2p_lib::{
     common::{ProtocolError, DEFAULT_TIMEOUT},
     dequeue, make_message,
-    pb::{kaspad_message::Payload, RequestTransactionsMessage, TransactionNotFoundMessage},
+    pb::{rustweaved_message::Payload, RequestTransactionsMessage, TransactionNotFoundMessage},
     IncomingRoute, Router,
 };
 use std::sync::Arc;

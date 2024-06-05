@@ -8,7 +8,7 @@ use kaspa_hashes::Hash;
 use kaspa_p2p_lib::{
     common::{ProtocolError, DEFAULT_TIMEOUT},
     dequeue_with_timeout, make_message,
-    pb::{kaspad_message::Payload, RequestIbdChainBlockLocatorMessage},
+    pb::{rustweaved_message::Payload, RequestIbdChainBlockLocatorMessage},
 };
 
 pub struct ChainNegotiationOutput {

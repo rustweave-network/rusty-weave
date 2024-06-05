@@ -2,12 +2,12 @@ use crate::imports::*;
 use kaspa_wrpc_client::Resolver;
 
 #[derive(Default, Handler)]
-#[help("Connect to a Kaspa network")]
+#[help("Connect to a Rustweave network")]
 pub struct Connect;
 
 impl Connect {
     async fn main(self: Arc<Self>, ctx: &Arc<dyn Context>, argv: Vec<String>, _cmd: &str) -> Result<()> {
-        let ctx = ctx.clone().downcast_arc::<KaspaCli>()?;
+        let ctx = ctx.clone().downcast_arc::<RustweaveCli>()?;
         if let Some(wrpc_client) = ctx.wallet().try_wrpc_client().as_ref() {
             let network_id = ctx.wallet().network_id()?;
 

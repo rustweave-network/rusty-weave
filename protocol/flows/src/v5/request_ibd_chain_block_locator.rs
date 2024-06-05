@@ -4,7 +4,7 @@ use kaspa_consensus_core::errors::{consensus::ConsensusError, sync::SyncManagerE
 use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue_with_request_id, make_response,
-    pb::{kaspad_message::Payload, IbdChainBlockLocatorMessage},
+    pb::{rustweaved_message::Payload, IbdChainBlockLocatorMessage},
     IncomingRoute, Router,
 };
 

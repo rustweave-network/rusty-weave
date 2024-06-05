@@ -6,7 +6,7 @@ use crate::imports::*;
 use wasm::{version, Process, ProcessEvent, ProcessOptions};
 
 #[derive(Debug, Clone, BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
-pub struct KaspadConfig {
+pub struct RustweavedConfig {
     pub mute: bool,
     pub path: Option<String>,
     pub network: Option<NetworkId>,
@@ -29,13 +29,13 @@ pub struct KaspadConfig {
     // ---
 }
 
-impl KaspadConfig {
+impl RustweavedConfig {
     pub fn new(path: &str, network_id: NetworkId, mute: bool) -> Self {
         Self { path: Some(path.to_string()), network: Some(network_id), mute, ..Default::default() }
     }
 }
 
-impl Default for KaspadConfig {
+impl Default for RustweavedConfig {
     fn default() -> Self {
         Self {
             mute: false,
@@ -63,9 +63,9 @@ impl Default for KaspadConfig {
     }
 }
 
-impl TryFrom<KaspadConfig> for Vec<String> {
+impl TryFrom<RustweavedConfig> for Vec<String> {
     type Error = Error;
-    fn try_from(args: KaspadConfig) -> Result<Vec<String>> {
+    fn try_from(args: RustweavedConfig) -> Result<Vec<String>> {
         let mut argv = Vec::new();
 
         if args.path.is_none() {
@@ -151,7 +151,7 @@ impl TryFrom<KaspadConfig> for Vec<String> {
 
 struct Inner {
     process: Option<Arc<Process>>,
-    config: Mutex<KaspadConfig>,
+    config: Mutex<RustweavedConfig>,
 }
 
 impl Default for Inner {
@@ -160,20 +160,20 @@ impl Default for Inner {
     }
 }
 
-pub struct Kaspad {
+pub struct Rustweaved {
     inner: Arc<Mutex<Inner>>,
     mute: Arc<AtomicBool>,
     events: Channel<ProcessEvent>,
 }
 
-impl Default for Kaspad {
+impl Default for Rustweaved {
     fn default() -> Self {
         Self { inner: Arc::new(Mutex::new(Inner::default())), mute: Arc::new(AtomicBool::new(false)), events: Channel::unbounded() }
     }
 }
 
-impl Kaspad {
-    pub fn new(args: KaspadConfig) -> Self {
+impl Rustweaved {
+    pub fn new(args: RustweavedConfig) -> Self {
         Self {
             mute: Arc::new(AtomicBool::new(args.mute)),
             inner: Arc::new(Mutex::new(Inner { config: Mutex::new(args), ..Default::default() })),
@@ -181,7 +181,7 @@ impl Kaspad {
         }
     }
 
-    pub fn configure(&self, config: KaspadConfig) -> Result<()> {
+    pub fn configure(&self, config: RustweavedConfig) -> Result<()> {
         self.mute.store(config.mute, Ordering::SeqCst);
         *self.inner().config.lock().unwrap() = config;
         Ok(())
@@ -215,7 +215,7 @@ impl Kaspad {
         let process = self.process();
         if let Some(process) = process {
             if process.is_running() {
-                return Err(Error::Custom("Kaspa node is already running.".to_string()));
+                return Err(Error::Custom("Rustweave node is already running.".to_string()));
             }
         }
 
@@ -236,7 +236,7 @@ impl Kaspad {
             self.mute.load(Ordering::SeqCst),
         );
 
-        // let options = KaspadOptions::new(path,network)?;
+        // let options = RustweavedOptions::new(path,network)?;
         let process = Arc::new(Process::new(options));
         self.inner().process.replace(process.clone());
         process.run()?;
@@ -308,15 +308,15 @@ impl Kaspad {
         if let Some(path) = path {
             Ok(version(path.as_str()).await?.to_string())
         } else {
-            Ok("Kaspad binary is not configured. Please use 'node select' command.".to_string())
+            Ok("Rustweaved binary is not configured. Please use 'node select' command.".to_string())
         }
     }
 }
 
 #[async_trait]
-pub trait KaspadCtl {
+pub trait RustweavedCtl {
     async fn version(&self) -> Result<String>;
-    async fn configure(&self, config: KaspadConfig) -> Result<()>;
+    async fn configure(&self, config: RustweavedConfig) -> Result<()>;
     async fn start(&self) -> Result<()>;
     async fn stop(&self) -> Result<()>;
     async fn join(&self) -> Result<()>;

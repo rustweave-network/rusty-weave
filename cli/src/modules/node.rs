@@ -1,5 +1,5 @@
 use crate::imports::*;
-use kaspa_daemon::KaspadConfig;
+use kaspa_daemon::RustweavedConfig;
 use workflow_core::task::sleep;
 use workflow_node::process;
 pub use workflow_node::process::Event;
@@ -7,7 +7,7 @@ use workflow_store::fs;
 
 #[derive(Describe, Debug, Clone, Serialize, Deserialize, Hash, Eq, PartialEq, Ord, PartialOrd)]
 #[serde(rename_all = "lowercase")]
-pub enum KaspadSettings {
+pub enum RustweavedSettings {
     #[describe("Binary location")]
     Location,
     #[describe("Mute logs")]
@@ -15,7 +15,7 @@ pub enum KaspadSettings {
 }
 
 #[async_trait]
-impl DefaultSettings for KaspadSettings {
+impl DefaultSettings for RustweavedSettings {
     async fn defaults() -> Vec<(Self, Value)> {
         let mut settings = vec![(Self::Mute, to_value(true).unwrap())];
 
@@ -31,7 +31,7 @@ impl DefaultSettings for KaspadSettings {
 }
 
 pub struct Node {
-    settings: SettingsStore<KaspadSettings>,
+    settings: SettingsStore<RustweavedSettings>,
     mute: Arc<AtomicBool>,
     is_running: Arc<AtomicBool>,
 }
@@ -49,7 +49,7 @@ impl Default for Node {
 #[async_trait]
 impl Handler for Node {
     fn verb(&self, ctx: &Arc<dyn Context>) -> Option<&'static str> {
-        if let Ok(ctx) = ctx.clone().downcast_arc::<KaspaCli>() {
+        if let Ok(ctx) = ctx.clone().downcast_arc::<RustweaveCli>() {
             ctx.daemons().clone().kaspad.as_ref().map(|_| "node")
         } else {
             None
@@ -57,19 +57,19 @@ impl Handler for Node {
     }
 
     fn help(&self, _ctx: &Arc<dyn Context>) -> &'static str {
-        "Manage the local Kaspa node instance"
+        "Manage the local Rustweave node instance"
     }
 
     async fn start(self: Arc<Self>, _ctx: &Arc<dyn Context>) -> cli::Result<()> {
         self.settings.try_load().await.ok();
-        if let Some(mute) = self.settings.get(KaspadSettings::Mute) {
+        if let Some(mute) = self.settings.get(RustweavedSettings::Mute) {
             self.mute.store(mute, Ordering::Relaxed);
         }
         Ok(())
     }
 
     async fn handle(self: Arc<Self>, ctx: &Arc<dyn Context>, argv: Vec<String>, cmd: &str) -> cli::Result<()> {
-        let ctx = ctx.clone().downcast_arc::<KaspaCli>()?;
+        let ctx = ctx.clone().downcast_arc::<RustweaveCli>()?;
         self.main(ctx, argv, cmd).await.map_err(|e| e.into())
     }
 }
@@ -79,20 +79,20 @@ impl Node {
         self.is_running.load(Ordering::SeqCst)
     }
 
-    async fn create_config(&self, ctx: &Arc<KaspaCli>) -> Result<KaspadConfig> {
+    async fn create_config(&self, ctx: &Arc<RustweaveCli>) -> Result<RustweavedConfig> {
         let location: String = self
             .settings
-            .get(KaspadSettings::Location)
+            .get(RustweavedSettings::Location)
             .ok_or_else(|| Error::Custom("No miner binary specified, please use `miner select` to select a binary.".into()))?;
         let network_id = ctx.wallet().network_id()?;
         // disabled for prompt update (until progress events are implemented)
         // let mute = self.mute.load(Ordering::SeqCst);
         let mute = false;
-        let config = KaspadConfig::new(location.as_str(), network_id, mute);
+        let config = RustweavedConfig::new(location.as_str(), network_id, mute);
         Ok(config)
     }
 
-    async fn main(self: Arc<Self>, ctx: Arc<KaspaCli>, mut argv: Vec<String>, cmd: &str) -> Result<()> {
+    async fn main(self: Arc<Self>, ctx: Arc<RustweaveCli>, mut argv: Vec<String>, cmd: &str) -> Result<()> {
         if argv.is_empty() {
             return self.display_help(ctx, argv).await;
         }
@@ -156,7 +156,7 @@ impl Node {
                     tprintln!(ctx, "{}", style("node is unmuted").dim());
                 }
                 // kaspad.mute(mute).await?;
-                self.settings.set(KaspadSettings::Mute, mute).await?;
+                self.settings.set(RustweavedSettings::Mute, mute).await?;
             }
             "status" => {
                 let status = kaspad.status().await?;
@@ -182,16 +182,16 @@ impl Node {
         Ok(())
     }
 
-    async fn display_help(self: Arc<Self>, ctx: Arc<KaspaCli>, _argv: Vec<String>) -> Result<()> {
+    async fn display_help(self: Arc<Self>, ctx: Arc<RustweaveCli>, _argv: Vec<String>) -> Result<()> {
         ctx.term().help(
             &[
-                ("select", "Select Kaspad executable (binary) location"),
-                ("version", "Display Kaspad executable version"),
-                ("start", "Start the local Kaspa node instance"),
-                ("stop", "Stop the local Kaspa node instance"),
-                ("restart", "Restart the local Kaspa node instance"),
-                ("kill", "Kill the local Kaspa node instance"),
-                ("status", "Get the status of the local Kaspa node instance"),
+                ("select", "Select Rustweaved executable (binary) location"),
+                ("version", "Display Rustweaved executable version"),
+                ("start", "Start the local Rustweave node instance"),
+                ("stop", "Stop the local Rustweave node instance"),
+                ("restart", "Restart the local Rustweave node instance"),
+                ("kill", "Kill the local Rustweave node instance"),
+                ("status", "Get the status of the local Rustweave node instance"),
                 ("mute", "Toggle log output"),
             ],
             None,
@@ -200,7 +200,7 @@ impl Node {
         Ok(())
     }
 
-    async fn select(self: Arc<Self>, ctx: Arc<KaspaCli>, path: Option<String>) -> Result<()> {
+    async fn select(self: Arc<Self>, ctx: Arc<RustweaveCli>, path: Option<String>) -> Result<()> {
         let root = nw_sys::app::folder();
 
         match path {
@@ -213,7 +213,7 @@ impl Node {
                     let binaries = binaries.iter().map(|p| p.display().to_string()).collect::<Vec<_>>();
                     if let Some(selection) = ctx.term().select("Please select a kaspad binary", &binaries).await? {
                         tprintln!(ctx, "selecting: {}", selection);
-                        self.settings.set(KaspadSettings::Location, selection.as_str()).await?;
+                        self.settings.set(RustweavedSettings::Location, selection.as_str()).await?;
                     } else {
                         tprintln!(ctx, "no selection is made");
                     }
@@ -224,7 +224,7 @@ impl Node {
                     let version = process::version(&path).await?;
                     tprintln!(ctx, "detected binary version: {}", version);
                     tprintln!(ctx, "selecting: {path}");
-                    self.settings.set(KaspadSettings::Location, path.as_str()).await?;
+                    self.settings.set(RustweavedSettings::Location, path.as_str()).await?;
                 } else {
                     twarnln!(ctx, "destination binary not found, please specify full path including the binary name");
                     twarnln!(ctx, "example: 'node select /home/user/testnet/kaspad'");
@@ -236,7 +236,7 @@ impl Node {
         Ok(())
     }
 
-    pub async fn handle_event(&self, ctx: &Arc<KaspaCli>, event: Event) -> Result<()> {
+    pub async fn handle_event(&self, ctx: &Arc<RustweaveCli>, event: Event) -> Result<()> {
         let term = ctx.term();
 
         match event {
@@ -245,12 +245,12 @@ impl Node {
                 term.refresh_prompt();
             }
             Event::Exit(_code) => {
-                tprintln!(ctx, "Kaspad has exited");
+                tprintln!(ctx, "Rustweaved has exited");
                 self.is_running.store(false, Ordering::SeqCst);
                 term.refresh_prompt();
             }
             Event::Error(error) => {
-                tprintln!(ctx, "{}", style(format!("Kaspad error: {error}")).red());
+                tprintln!(ctx, "{}", style(format!("Rustweaved error: {error}")).red());
                 self.is_running.store(false, Ordering::SeqCst);
                 term.refresh_prompt();
             }

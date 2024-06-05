@@ -26,12 +26,12 @@ use kaspa_database::{create_temp_db, load_existing_db};
 use kaspa_hashes::Hash;
 use kaspa_perf_monitor::{builder::Builder, counters::CountersSnapshot};
 use kaspa_utils::fd_budget;
-use simulator::network::KaspaNetworkSimulator;
+use simulator::network::RustweaveNetworkSimulator;
 use std::{collections::VecDeque, sync::Arc, time::Duration};
 
 pub mod simulator;
 
-/// Kaspa Network Simulator
+/// Rustweave Network Simulator
 #[derive(Parser, Debug)]
 #[command(author, version, about, long_about = None)]
 struct Args {
@@ -225,7 +225,7 @@ fn main_impl(mut args: Args) {
         (consensus, lifetime)
     } else {
         let until = if args.target_blocks.is_none() { config.genesis.timestamp + args.sim_time * 1000 } else { u64::MAX }; // milliseconds
-        let mut sim = KaspaNetworkSimulator::new(args.delay, args.bps, args.target_blocks, config.clone(), args.output_dir);
+        let mut sim = RustweaveNetworkSimulator::new(args.delay, args.bps, args.target_blocks, config.clone(), args.output_dir);
         let (consensus, handles, lifetime) = sim
             .init(
                 args.miners,

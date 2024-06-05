@@ -11,7 +11,7 @@ pub fn try_parse_required_nonzero_kaspa_as_sompi_u64<S: ToString + Display>(kasp
             .map_err(|_| Error::custom(format!("Supplied Kasapa amount is not valid: '{kaspa_amount}'")))?
             * SOMPI_PER_KASPA as f64;
         if sompi_amount < 0.0 {
-            Err(Error::custom("Supplied Kaspa amount is not valid: '{kaspa_amount}'"))
+            Err(Error::custom("Supplied Rustweave amount is not valid: '{kaspa_amount}'"))
         } else {
             let sompi_amount = sompi_amount as u64;
             if sompi_amount == 0 {
@@ -21,7 +21,7 @@ pub fn try_parse_required_nonzero_kaspa_as_sompi_u64<S: ToString + Display>(kasp
             }
         }
     } else {
-        Err(Error::custom("Missing Kaspa amount"))
+        Err(Error::custom("Missing Rustweave amount"))
     }
 }
 
@@ -33,12 +33,12 @@ pub fn try_parse_required_kaspa_as_sompi_u64<S: ToString + Display>(kaspa_amount
             .map_err(|_| Error::custom(format!("Supplied Kasapa amount is not valid: '{kaspa_amount}'")))?
             * SOMPI_PER_KASPA as f64;
         if sompi_amount < 0.0 {
-            Err(Error::custom("Supplied Kaspa amount is not valid: '{kaspa_amount}'"))
+            Err(Error::custom("Supplied Rustweave amount is not valid: '{kaspa_amount}'"))
         } else {
             Ok(sompi_amount as u64)
         }
     } else {
-        Err(Error::custom("Missing Kaspa amount"))
+        Err(Error::custom("Missing Rustweave amount"))
     }
 }
 
@@ -50,7 +50,7 @@ pub fn try_parse_optional_kaspa_as_sompi_i64<S: ToString + Display>(kaspa_amount
             .map_err(|_e| Error::custom(format!("Supplied Kasapa amount is not valid: '{kaspa_amount}'")))?
             * SOMPI_PER_KASPA as f64;
         if sompi_amount < 0.0 {
-            Err(Error::custom("Supplied Kaspa amount is not valid: '{kaspa_amount}'"))
+            Err(Error::custom("Supplied Rustweave amount is not valid: '{kaspa_amount}'"))
         } else {
             Ok(Some(sompi_amount as i64))
         }

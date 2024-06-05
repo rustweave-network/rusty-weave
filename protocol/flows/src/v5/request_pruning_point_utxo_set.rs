@@ -7,7 +7,7 @@ use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue, make_message,
     pb::{
-        kaspad_message::Payload, DonePruningPointUtxoSetChunksMessage, PruningPointUtxoSetChunkMessage, UnexpectedPruningPointMessage,
+        rustweaved_message::Payload, DonePruningPointUtxoSetChunksMessage, PruningPointUtxoSetChunkMessage, UnexpectedPruningPointMessage,
     },
     IncomingRoute, Router,
 };

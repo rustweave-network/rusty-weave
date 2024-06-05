@@ -59,7 +59,7 @@ impl TransactionInputInner {
     }
 }
 
-/// Represents a Kaspa transaction input
+/// Represents a Rustweave transaction input
 /// @category Consensus
 #[derive(Clone, Debug, Serialize, Deserialize, CastFromJs)]
 #[wasm_bindgen(inspectable)]

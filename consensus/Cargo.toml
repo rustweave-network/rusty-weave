@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-consensus"
-description = "Kaspa consensus library"
+description = "Rustweave consensus library"
 rust-version.workspace = true
 version.workspace = true
 edition.workspace = true

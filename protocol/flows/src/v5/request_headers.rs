@@ -5,7 +5,7 @@ use kaspa_hashes::Hash;
 use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue, dequeue_with_request_id, make_response,
-    pb::{self, kaspad_message::Payload, BlockHeadersMessage, DoneHeadersMessage},
+    pb::{self, rustweaved_message::Payload, BlockHeadersMessage, DoneHeadersMessage},
     IncomingRoute, Router,
 };
 use log::debug;

@@ -1,5 +1,5 @@
 //!
-//! Kaspa value formatting and parsing utilities.
+//! Rustweave value formatting and parsing utilities.
 //!
 
 use crate::result::Result;

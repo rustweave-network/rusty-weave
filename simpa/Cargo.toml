@@ -1,6 +1,6 @@
 [package]
 name = "simpa"
-description = "Kaspa Network Simulator"
+description = "Rustweave Network Simulator"
 publish = false
 rust-version.workspace = true
 version.workspace = true

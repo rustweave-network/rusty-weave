@@ -21,13 +21,13 @@ impl Handler for Message {
     }
 
     async fn handle(self: Arc<Self>, ctx: &Arc<dyn Context>, argv: Vec<String>, cmd: &str) -> cli::Result<()> {
-        let ctx = ctx.clone().downcast_arc::<KaspaCli>()?;
+        let ctx = ctx.clone().downcast_arc::<RustweaveCli>()?;
         self.main(ctx, argv, cmd).await.map_err(|e| e.into())
     }
 }
 
 impl Message {
-    async fn main(self: Arc<Self>, ctx: Arc<KaspaCli>, argv: Vec<String>, _cmd: &str) -> Result<()> {
+    async fn main(self: Arc<Self>, ctx: Arc<RustweaveCli>, argv: Vec<String>, _cmd: &str) -> Result<()> {
         if argv.is_empty() {
             return self.display_help(ctx, argv).await;
         }
@@ -64,7 +64,7 @@ impl Message {
         Ok(())
     }
 
-    async fn display_help(self: Arc<Self>, ctx: Arc<KaspaCli>, _argv: Vec<String>) -> Result<()> {
+    async fn display_help(self: Arc<Self>, ctx: Arc<RustweaveCli>, _argv: Vec<String>) -> Result<()> {
         ctx.term().help(
             &[
                 ("sign <kaspa_address>", "Sign a message with the private key that matches the given address. Prompts for message."),
@@ -79,7 +79,7 @@ impl Message {
         Ok(())
     }
 
-    async fn sign(self: Arc<Self>, ctx: Arc<KaspaCli>, kaspa_address: &str, message: &str) -> Result<()> {
+    async fn sign(self: Arc<Self>, ctx: Arc<RustweaveCli>, kaspa_address: &str, message: &str) -> Result<()> {
         let kaspa_address = Address::try_from(kaspa_address)?;
         if kaspa_address.version != Version::PubKey {
             return Err(Error::custom("Address not supported for message signing. Only supports PubKey addresses"));
@@ -100,7 +100,7 @@ impl Message {
         }
     }
 
-    async fn verify(self: Arc<Self>, ctx: Arc<KaspaCli>, kaspa_address: &str, signature: &str, message: &str) -> Result<()> {
+    async fn verify(self: Arc<Self>, ctx: Arc<RustweaveCli>, kaspa_address: &str, signature: &str, message: &str) -> Result<()> {
         let kaspa_address = Address::try_from(kaspa_address)?;
         if kaspa_address.version != Version::PubKey {
             return Err(Error::custom("Address not supported for message signing. Only supports PubKey addresses"));
@@ -126,7 +126,7 @@ impl Message {
         Ok(())
     }
 
-    async fn get_address_private_key(self: Arc<Self>, ctx: &Arc<KaspaCli>, kaspa_address: Address) -> Result<[u8; 32]> {
+    async fn get_address_private_key(self: Arc<Self>, ctx: &Arc<RustweaveCli>, kaspa_address: Address) -> Result<[u8; 32]> {
         let account = ctx.wallet().account()?;
 
         match account.account_kind().as_ref() {

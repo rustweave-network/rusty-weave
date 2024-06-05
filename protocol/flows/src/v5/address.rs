@@ -4,7 +4,7 @@ use kaspa_addressmanager::NetAddress;
 use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue, dequeue_with_timeout, make_message,
-    pb::{kaspad_message::Payload, AddressesMessage, RequestAddressesMessage},
+    pb::{rustweaved_message::Payload, AddressesMessage, RequestAddressesMessage},
     IncomingRoute, Router,
 };
 use kaspa_utils::networking::IpAddress;

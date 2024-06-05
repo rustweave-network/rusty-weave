@@ -1,5 +1,5 @@
 use crate::protowire::{
-    kaspad_response::Payload, BlockAddedNotificationMessage, KaspadResponse, NewBlockTemplateNotificationMessage, RpcNotifyCommand,
+    rustweaved_response::Payload, BlockAddedNotificationMessage, RustweavedResponse, NewBlockTemplateNotificationMessage, RpcNotifyCommand,
 };
 use crate::protowire::{
     FinalityConflictNotificationMessage, FinalityConflictResolvedNotificationMessage, NotifyPruningPointUtxoSetOverrideRequestMessage,
@@ -19,7 +19,7 @@ use std::sync::Arc;
 // rpc_core to protowire
 // ----------------------------------------------------------------------------
 
-from!(item: &kaspa_rpc_core::Notification, KaspadResponse, { Self { id: 0, payload: Some(item.into()) } });
+from!(item: &kaspa_rpc_core::Notification, RustweavedResponse, { Self { id: 0, payload: Some(item.into()) } });
 
 from!(item: &kaspa_rpc_core::Notification, Payload, {
     match item {
@@ -93,10 +93,10 @@ from!(_item: &StopNotifyingPruningPointUtxoSetOverrideRequestMessage, NotifyPrun
 // protowire to rpc_core
 // ----------------------------------------------------------------------------
 
-try_from!(item: &KaspadResponse, kaspa_rpc_core::Notification, {
+try_from!(item: &RustweavedResponse, kaspa_rpc_core::Notification, {
     item.payload
         .as_ref()
-        .ok_or_else(|| RpcError::MissingRpcFieldError("KaspadResponse".to_string(), "payload".to_string()))?
+        .ok_or_else(|| RpcError::MissingRpcFieldError("RustweavedResponse".to_string(), "payload".to_string()))?
         .try_into()?
 });
 

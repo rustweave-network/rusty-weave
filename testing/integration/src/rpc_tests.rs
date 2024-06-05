@@ -6,7 +6,7 @@ use kaspa_addresses::{Address, Prefix, Version};
 use kaspa_consensus::params::SIMNET_GENESIS;
 use kaspa_consensus_core::{constants::MAX_SOMPI, subnets::SubnetworkId, tx::Transaction};
 use kaspa_core::info;
-use kaspa_grpc_core::ops::KaspadPayloadOps;
+use kaspa_grpc_core::ops::RustweavedPayloadOps;
 use kaspa_hashes::Hash;
 use kaspa_notify::{
     connection::{ChannelConnection, ChannelType},
@@ -64,10 +64,10 @@ async fn sanity_test() {
     // The intent of this for/match design (emphasizing the absence of an arm with fallback pattern in the match)
     // is to force any implementor of a new RpcApi method to add a matching arm here and to strongly incentivize
     // the adding of an actual sanity test of said new method.
-    for op in KaspadPayloadOps::list() {
+    for op in RustweavedPayloadOps::list() {
         let network_id = daemon.network;
         let task: JoinHandle<()> = match op {
-            KaspadPayloadOps::SubmitBlock => {
+            RustweavedPayloadOps::SubmitBlock => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     // Register to basic virtual events in order to keep track of block submission
@@ -151,11 +151,11 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetBlockTemplate => {
+            RustweavedPayloadOps::GetBlockTemplate => {
                 tst!(op, "see SubmitBlock")
             }
 
-            KaspadPayloadOps::GetCurrentNetwork => {
+            RustweavedPayloadOps::GetCurrentNetwork => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_current_network_call(GetCurrentNetworkRequest {}).await.unwrap();
@@ -163,7 +163,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetBlock => {
+            RustweavedPayloadOps::GetBlock => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let result = rpc_client.get_block_call(GetBlockRequest { hash: 0.into(), include_transactions: false }).await;
@@ -177,7 +177,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetBlocks => {
+            RustweavedPayloadOps::GetBlocks => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client
@@ -190,7 +190,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetInfo => {
+            RustweavedPayloadOps::GetInfo => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_info_call(GetInfoRequest {}).await.unwrap();
@@ -202,21 +202,21 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::Shutdown => {
+            RustweavedPayloadOps::Shutdown => {
                 // This test is purposely left blank since shutdown can only be tested after all other
                 // tests completed
                 tst!(op, "must be run in the end")
             }
 
-            KaspadPayloadOps::GetPeerAddresses => {
+            RustweavedPayloadOps::GetPeerAddresses => {
                 tst!(op, "see AddPeer, Ban")
             }
 
-            KaspadPayloadOps::GetSink => {
+            RustweavedPayloadOps::GetSink => {
                 tst!(op, "see SubmitBlock")
             }
 
-            KaspadPayloadOps::GetMempoolEntry => {
+            RustweavedPayloadOps::GetMempoolEntry => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response_result = rpc_client
@@ -232,7 +232,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetMempoolEntries => {
+            RustweavedPayloadOps::GetMempoolEntries => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client
@@ -246,7 +246,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetConnectedPeerInfo => {
+            RustweavedPayloadOps::GetConnectedPeerInfo => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_connected_peer_info_call(GetConnectedPeerInfoRequest {}).await.unwrap();
@@ -254,7 +254,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::AddPeer => {
+            RustweavedPayloadOps::AddPeer => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let peer_address = ContextualNetAddress::from_str("1.2.3.4").unwrap();
@@ -268,7 +268,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::Ban => {
+            RustweavedPayloadOps::Ban => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let peer_address = ContextualNetAddress::from_str("5.6.7.8").unwrap();
@@ -286,11 +286,11 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::Unban => {
+            RustweavedPayloadOps::Unban => {
                 tst!(op, "see Ban")
             }
 
-            KaspadPayloadOps::SubmitTransaction => {
+            RustweavedPayloadOps::SubmitTransaction => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     // Build an erroneous transaction...
@@ -301,7 +301,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetSubnetwork => {
+            RustweavedPayloadOps::GetSubnetwork => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let result =
@@ -312,15 +312,15 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetVirtualChainFromBlock => {
+            RustweavedPayloadOps::GetVirtualChainFromBlock => {
                 tst!(op, "see SubmitBlock")
             }
 
-            KaspadPayloadOps::GetBlockCount => {
+            RustweavedPayloadOps::GetBlockCount => {
                 tst!(op, "see SubmitBlock")
             }
 
-            KaspadPayloadOps::GetBlockDagInfo => {
+            RustweavedPayloadOps::GetBlockDagInfo => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_block_dag_info_call(GetBlockDagInfoRequest {}).await.unwrap();
@@ -328,7 +328,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::ResolveFinalityConflict => {
+            RustweavedPayloadOps::ResolveFinalityConflict => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response_result = rpc_client
@@ -342,7 +342,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetHeaders => {
+            RustweavedPayloadOps::GetHeaders => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response_result = rpc_client
@@ -354,7 +354,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetUtxosByAddresses => {
+            RustweavedPayloadOps::GetUtxosByAddresses => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let addresses = vec![Address::new(Prefix::Simnet, Version::PubKey, &[0u8; 32])];
@@ -363,7 +363,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetBalanceByAddress => {
+            RustweavedPayloadOps::GetBalanceByAddress => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client
@@ -376,7 +376,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetBalancesByAddresses => {
+            RustweavedPayloadOps::GetBalancesByAddresses => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let addresses = vec![Address::new(Prefix::Simnet, Version::PubKey, &[1u8; 32])];
@@ -394,7 +394,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetSinkBlueScore => {
+            RustweavedPayloadOps::GetSinkBlueScore => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_sink_blue_score_call(GetSinkBlueScoreRequest {}).await.unwrap();
@@ -403,7 +403,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::EstimateNetworkHashesPerSecond => {
+            RustweavedPayloadOps::EstimateNetworkHashesPerSecond => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response_result = rpc_client
@@ -417,7 +417,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetMempoolEntriesByAddresses => {
+            RustweavedPayloadOps::GetMempoolEntriesByAddresses => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let addresses = vec![Address::new(Prefix::Simnet, Version::PubKey, &[0u8; 32])];
@@ -436,7 +436,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetCoinSupply => {
+            RustweavedPayloadOps::GetCoinSupply => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_coin_supply_call(GetCoinSupplyRequest {}).await.unwrap();
@@ -445,14 +445,14 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::Ping => {
+            RustweavedPayloadOps::Ping => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let _ = rpc_client.ping_call(PingRequest {}).await.unwrap();
                 })
             }
 
-            KaspadPayloadOps::GetMetrics => {
+            RustweavedPayloadOps::GetMetrics => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let get_metrics_call_response = rpc_client
@@ -505,7 +505,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetServerInfo => {
+            RustweavedPayloadOps::GetServerInfo => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let response = rpc_client.get_server_info_call(GetServerInfoRequest {}).await.unwrap();
@@ -514,14 +514,14 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::GetSyncStatus => {
+            RustweavedPayloadOps::GetSyncStatus => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let _ = rpc_client.get_sync_status_call(GetSyncStatusRequest {}).await.unwrap();
                 })
             }
 
-            KaspadPayloadOps::GetDaaScoreTimestampEstimate => {
+            RustweavedPayloadOps::GetDaaScoreTimestampEstimate => {
                 let rpc_client = client.clone();
                 tst!(op, {
                     let results = rpc_client
@@ -546,7 +546,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::NotifyBlockAdded => {
+            RustweavedPayloadOps::NotifyBlockAdded => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
@@ -554,7 +554,7 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::NotifyNewBlockTemplate => {
+            RustweavedPayloadOps::NotifyNewBlockTemplate => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
@@ -562,42 +562,42 @@ async fn sanity_test() {
                 })
             }
 
-            KaspadPayloadOps::NotifyFinalityConflict => {
+            RustweavedPayloadOps::NotifyFinalityConflict => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
                     rpc_client.start_notify(id, FinalityConflictScope {}.into()).await.unwrap();
                 })
             }
-            KaspadPayloadOps::NotifyUtxosChanged => {
+            RustweavedPayloadOps::NotifyUtxosChanged => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
                     rpc_client.start_notify(id, UtxosChangedScope::new(vec![]).into()).await.unwrap();
                 })
             }
-            KaspadPayloadOps::NotifySinkBlueScoreChanged => {
+            RustweavedPayloadOps::NotifySinkBlueScoreChanged => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
                     rpc_client.start_notify(id, SinkBlueScoreChangedScope {}.into()).await.unwrap();
                 })
             }
-            KaspadPayloadOps::NotifyPruningPointUtxoSetOverride => {
+            RustweavedPayloadOps::NotifyPruningPointUtxoSetOverride => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
                     rpc_client.start_notify(id, PruningPointUtxoSetOverrideScope {}.into()).await.unwrap();
                 })
             }
-            KaspadPayloadOps::NotifyVirtualDaaScoreChanged => {
+            RustweavedPayloadOps::NotifyVirtualDaaScoreChanged => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
                     rpc_client.start_notify(id, VirtualDaaScoreChangedScope {}.into()).await.unwrap();
                 })
             }
-            KaspadPayloadOps::NotifyVirtualChainChanged => {
+            RustweavedPayloadOps::NotifyVirtualChainChanged => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
@@ -607,14 +607,14 @@ async fn sanity_test() {
                         .unwrap();
                 })
             }
-            KaspadPayloadOps::StopNotifyingUtxosChanged => {
+            RustweavedPayloadOps::StopNotifyingUtxosChanged => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {
                     rpc_client.stop_notify(id, UtxosChangedScope::new(vec![]).into()).await.unwrap();
                 })
             }
-            KaspadPayloadOps::StopNotifyingPruningPointUtxoSetOverride => {
+            RustweavedPayloadOps::StopNotifyingPruningPointUtxoSetOverride => {
                 let rpc_client = client.clone();
                 let id = listener_id;
                 tst!(op, {

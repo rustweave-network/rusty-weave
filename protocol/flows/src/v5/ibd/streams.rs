@@ -13,7 +13,7 @@ use kaspa_p2p_lib::{
     convert::model::trusted::TrustedDataEntry,
     make_message,
     pb::{
-        kaspad_message::Payload, RequestNextHeadersMessage, RequestNextPruningPointAndItsAnticoneBlocksMessage,
+        rustweaved_message::Payload, RequestNextHeadersMessage, RequestNextPruningPointAndItsAnticoneBlocksMessage,
         RequestNextPruningPointUtxoSetChunkMessage,
     },
     IncomingRoute, Router,

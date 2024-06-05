@@ -63,7 +63,7 @@ members = [
 [workspace.package]
 rust-version = "1.78.0"
 version = "0.14.1"
-authors = ["Kaspa developers"]
+authors = ["Rustweave developers"]
 license = "ISC"
 repository = "https://github.com/kaspanet/rusty-kaspa"
 edition = "2021"

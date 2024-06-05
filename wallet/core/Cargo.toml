@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-wallet-core"
-description = "Kaspa wallet library"
+description = "Rustweave wallet library"
 keywords = ["kaspa", "wallet"]
 rust-version.workspace = true
 version.workspace = true

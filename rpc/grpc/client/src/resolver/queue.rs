@@ -1,11 +1,11 @@
 use crate::{
     error::{Error, Result},
-    resolver::{matcher::Matcher, KaspadResponseReceiver, KaspadResponseSender, Resolver},
+    resolver::{matcher::Matcher, RustweavedResponseReceiver, RustweavedResponseSender, Resolver},
 };
 use kaspa_core::trace;
 use kaspa_grpc_core::{
-    ops::KaspadPayloadOps,
-    protowire::{KaspadRequest, KaspadResponse},
+    ops::RustweavedPayloadOps,
+    protowire::{RustweavedRequest, RustweavedResponse},
 };
 use std::{
     collections::VecDeque,
@@ -17,17 +17,17 @@ use tokio::sync::oneshot;
 #[derive(Debug)]
 struct Pending {
     timestamp: Instant,
-    op: KaspadPayloadOps,
-    request: KaspadRequest,
-    sender: KaspadResponseSender,
+    op: RustweavedPayloadOps,
+    request: RustweavedRequest,
+    sender: RustweavedResponseSender,
 }
 
 impl Pending {
-    fn new(op: KaspadPayloadOps, request: KaspadRequest, sender: KaspadResponseSender) -> Self {
+    fn new(op: RustweavedPayloadOps, request: RustweavedRequest, sender: RustweavedResponseSender) -> Self {
         Self { timestamp: Instant::now(), op, request, sender }
     }
 
-    fn is_matching(&self, response: &KaspadResponse, response_op: KaspadPayloadOps) -> bool {
+    fn is_matching(&self, response: &RustweavedResponse, response_op: RustweavedPayloadOps) -> bool {
         self.op == response_op && self.request.is_matching(response)
     }
 }
@@ -44,8 +44,8 @@ impl QueueResolver {
 }
 
 impl Resolver for QueueResolver {
-    fn register_request(&self, op: KaspadPayloadOps, request: &KaspadRequest) -> KaspadResponseReceiver {
-        let (sender, receiver) = oneshot::channel::<Result<KaspadResponse>>();
+    fn register_request(&self, op: RustweavedPayloadOps, request: &RustweavedRequest) -> RustweavedResponseReceiver {
+        let (sender, receiver) = oneshot::channel::<Result<RustweavedResponse>>();
         {
             let pending = Pending::new(op, request.clone(), sender);
 
@@ -56,8 +56,8 @@ impl Resolver for QueueResolver {
         receiver
     }
 
-    fn handle_response(&self, response: KaspadResponse) {
-        let response_op: KaspadPayloadOps = response.payload.as_ref().unwrap().try_into().expect("response is not a notification");
+    fn handle_response(&self, response: RustweavedResponse) {
+        let response_op: RustweavedPayloadOps = response.payload.as_ref().unwrap().try_into().expect("response is not a notification");
         trace!("[Resolver] handle_response type: {:?}", response_op);
         let mut pending_calls = self.pending_calls.lock().unwrap();
         let mut pending: Option<Pending> = None;

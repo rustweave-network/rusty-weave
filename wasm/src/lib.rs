@@ -8,12 +8,12 @@
 
 <br>
 
-Rusty-Kaspa WASM32 bindings offer direct integration of Rust code and Rusty-Kaspa
+Rusty-Rustweave WASM32 bindings offer direct integration of Rust code and Rusty-Rustweave
 codebase within JavaScript environments such as Node.js and Web Browsers.
 
 ## Documentation
 
-- [**integrating with Kaspa** guide](https://kaspa.aspectron.org/)
+- [**integrating with Rustweave** guide](https://kaspa.aspectron.org/)
 - [**Rustdoc** documentation](https://docs.rs/kaspa-wasm/latest/kaspa-wasm)
 - [**JSDoc** documentation](https://kaspa.aspectron.org/jsdoc/)
 
@@ -26,7 +26,7 @@ to the 'snake_case' convention in Rust.
 The APIs are currently separated into the following groups (this will be expanded in the future):
 
 - **Transaction API** — Bindings for primitives related to transactions.
-- **RPC API** — [RPC interface bindings](rpc) for the Kaspa node using WebSocket (wRPC) connections.
+- **RPC API** — [RPC interface bindings](rpc) for the Rustweave node using WebSocket (wRPC) connections.
 - **Wallet API** — API for async core wallet processing tasks.
 
 ## NPM Modules
@@ -51,7 +51,7 @@ JavaScript examples for using this framework can be found at:
 ## WASM32 Binaries
 
 For pre-built browser-compatible WASM32 redistributables of this
-framework please see the releases section of the Rusty Kaspa
+framework please see the releases section of the Rusty Rustweave
 repository at <https://github.com/kaspanet/rusty-kaspa/releases>.
 
 ## Using RPC
@@ -61,7 +61,7 @@ in the NodeJS environment, you need to introduce a global W3C WebSocket
 object before loading the WASM32 library (to simulate the browser behavior).
 You can the [WebSocket](https://www.npmjs.com/package/websocket)
 module that offers W3C WebSocket compatibility and is compatible
-with Kaspa RPC implementation.
+with Rustweave RPC implementation.
 
 You can use the following shims:
 
@@ -123,7 +123,7 @@ const rpc = new RpcClient({
 })();
 ```
 
-For more details, please follow the [**integrating with Kaspa**](https://kaspa.aspectron.org/) guide.
+For more details, please follow the [**integrating with Rustweave**](https://kaspa.aspectron.org/) guide.
 
 */
 
@@ -147,11 +147,11 @@ cfg_if::cfg_if! {
         pub use kaspa_pow::wasm::*;
 
         pub mod rpc {
-            //! Kaspa RPC interface
+            //! Rustweave RPC interface
             //!
 
             pub mod messages {
-                //! Kaspa RPC messages
+                //! Rustweave RPC messages
                 pub use kaspa_rpc_core::model::message::*;
             }
             pub use kaspa_rpc_core::api::rpc::RpcApi;
@@ -173,11 +173,11 @@ cfg_if::cfg_if! {
         pub use kaspa_pow::wasm::*;
 
         pub mod rpc {
-            //! Kaspa RPC interface
+            //! Rustweave RPC interface
             //!
 
             pub mod messages {
-                //! Kaspa RPC messages
+                //! Rustweave RPC messages
                 pub use kaspa_rpc_core::model::message::*;
             }
             pub use kaspa_rpc_core::api::rpc::RpcApi;

@@ -10,7 +10,7 @@ use kaspa_hashes::Hash;
 use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue, dequeue_with_timeout, make_message, make_request,
-    pb::{kaspad_message::Payload, InvRelayBlockMessage, RequestBlockLocatorMessage, RequestRelayBlocksMessage},
+    pb::{rustweaved_message::Payload, InvRelayBlockMessage, RequestBlockLocatorMessage, RequestRelayBlocksMessage},
     IncomingRoute, Router, SharedIncomingRoute,
 };
 use kaspa_utils::channel::{JobSender, JobTrySendError as TrySendError};

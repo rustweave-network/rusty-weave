@@ -1,6 +1,6 @@
 [package]
 name = "kaspa-wallet-keys"
-description = "Kaspa wallet key primitives"
+description = "Rustweave wallet key primitives"
 keywords = ["kaspa", "wallet"]
 version.workspace = true
 edition.workspace = true

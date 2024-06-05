@@ -3,7 +3,7 @@ use kaspa_core::{debug, task::tick::TickReason};
 use kaspa_p2p_lib::{
     common::ProtocolError,
     dequeue, dequeue_with_timeout, make_message,
-    pb::{kaspad_message::Payload, PingMessage, PongMessage},
+    pb::{rustweaved_message::Payload, PingMessage, PongMessage},
     IncomingRoute, Router,
 };
 use rand::Rng;
