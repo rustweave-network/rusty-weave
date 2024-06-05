@@ -252,7 +252,7 @@ impl NetworkId {
 
     /// Returns a textual description of the network prefixed with `kaspa-`
     pub fn to_prefixed(&self) -> String {
-        format!("kaspa-{}", self)
+        format!("rustweave-{}", self)
     }
 
     pub fn from_prefixed(prefixed: &str) -> Result<Self, NetworkIdError> {
