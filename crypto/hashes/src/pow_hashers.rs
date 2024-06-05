@@ -1,7 +1,7 @@
 use crate::Hash;
 
 #[derive(Clone)]
-pub struct PowHash([u64; 25]);
+pub struct PowHash(blake3::Hasher);
 
 #[derive(Clone)]
 pub struct KHeavyHash;
@@ -10,29 +10,21 @@ impl PowHash {
     // The initial state of `cSHAKE256("ProofOfWorkHash")`
     // [10] -> 1123092876221303310 ^ 0x04(padding byte) = 1123092876221303306
     // [16] -> 10306167911662716186 ^ 0x8000000000000000(final padding) = 1082795874807940378
-    #[rustfmt::skip]
-    const INITIAL_STATE: [u64; 25] = [
-        1242148031264380989, 3008272977830772284, 2188519011337848018, 1992179434288343456, 8876506674959887717,
-        5399642050693751366, 1745875063082670864, 8605242046444978844, 17936695144567157056, 3343109343542796272,
-        1123092876221303306, 4963925045340115282, 17037383077651887893, 16629644495023626889, 12833675776649114147,
-        3784524041015224902, 1082795874807940378, 13952716920571277634, 13411128033953605860, 15060696040649351053,
-        9928834659948351306, 5237849264682708699, 12825353012139217522, 6706187291358897596, 196324915476054915,
-    ];
     #[inline]
     pub fn new(pre_pow_hash: Hash, timestamp: u64) -> Self {
-        let mut start = Self::INITIAL_STATE;
-        for (pre_pow_word, state_word) in pre_pow_hash.iter_le_u64().zip(start.iter_mut()) {
-            *state_word ^= pre_pow_word;
-        }
-        start[4] ^= timestamp;
-        Self(start)
+        let mut hasher = blake3::Hasher::new();
+
+        hasher.update(&pre_pow_hash.as_bytes());
+        hasher.update(&timestamp.to_le_bytes());
+        hasher.update(&[0u8; 32]);
+
+        Self(hasher)
     }
 
     #[inline(always)]
     pub fn finalize_with_nonce(mut self, nonce: u64) -> Hash {
-        self.0[9] ^= nonce;
-        keccak256::f1600(&mut self.0);
-        Hash::from_le_u64(self.0[..4].try_into().unwrap())
+        self.0.update(&nonce.to_le_bytes());
+        Hash(*self.0.finalize().as_bytes())
     }
 }
 
@@ -83,7 +75,6 @@ mod tests {
     use sha3::digest::{ExtendableOutput, Update, XofReader};
     use sha3::{CShake256, CShake256Core};
 
-    const PROOF_OF_WORK_DOMAIN: &[u8] = b"ProofOfWorkHash";
     const HEAVY_HASH_DOMAIN: &[u8] = b"HeavyHash";
 
     #[test]
@@ -94,14 +85,14 @@ mod tests {
         let hasher = PowHash::new(pre_pow_hash, timestamp);
         let hash1 = hasher.finalize_with_nonce(nonce);
 
-        let hasher = CShake256::from_core(CShake256Core::new(PROOF_OF_WORK_DOMAIN))
-            .chain(pre_pow_hash.0)
-            .chain(timestamp.to_le_bytes())
-            .chain([0u8; 32])
-            .chain(nonce.to_le_bytes());
-        let mut hash2 = [0u8; 32];
-        hasher.finalize_xof().read(&mut hash2);
-        assert_eq!(Hash(hash2), hash1);
+        let mut hasher = blake3::Hasher::new();
+        hasher.update(&pre_pow_hash.as_bytes());
+        hasher.update(&timestamp.to_le_bytes());
+        hasher.update(&[0u8; 32]);
+        hasher.update(&nonce.to_le_bytes());
+
+        let hash2 = Hash(*hasher.finalize().as_bytes());
+        assert_eq!(hash2, hash1);
     }
 
     #[test]
