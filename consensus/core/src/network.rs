@@ -28,7 +28,7 @@ pub enum NetworkType {
 impl NetworkType {
     pub fn default_rpc_port(&self) -> u16 {
         match self {
-            NetworkType::Mainnet => 16110,
+            NetworkType::Mainnet => 11110,
             NetworkType::Testnet => 16210,
             NetworkType::Simnet => 16510,
             NetworkType::Devnet => 16610,
@@ -228,7 +228,7 @@ impl NetworkId {
         // this reasoning so we keep it on the same port in order to simplify RPC client management (hence [`default_rpc_port`]
         // is defined on the [`NetworkType`] struct
         match self.network_type {
-            NetworkType::Mainnet => 16111,
+            NetworkType::Mainnet => 11111,
             NetworkType::Testnet => match self.suffix {
                 Some(10) => 16211,
                 Some(11) => 16311,
