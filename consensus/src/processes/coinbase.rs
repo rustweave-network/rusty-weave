@@ -5,7 +5,6 @@ use kaspa_consensus_core::{
     tx::{ScriptPublicKey, ScriptVec, Transaction, TransactionOutput},
     BlockHashMap, BlockHashSet,
 };
-use kaspa_core::info;
 use std::{convert::TryInto, mem::size_of};
 
 use crate::{constants, model::stores::ghostdag::GhostdagData};
